@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net8.0-windows10.0.26100.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><IsPackable>false</IsPackable><IsTestProject>true</IsTestProject></PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.6.4" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.6.4" />
+    <Compile Include="..\MenuCraft\Core\*.cs" Link="Core\%(Filename)%(Extension)" />
+    <Compile Include="..\MenuCraft\Services\ModernMenuScanner.cs" Link="Services\ModernMenuScanner.cs" />
+    <Compile Include="..\MenuCraft\Services\DesktopMenuReader.cs" Link="Services\DesktopMenuReader.cs" />
+    <Compile Include="..\MenuCraft\ViewModels\MenuViewModel.cs" Link="ViewModels\MenuViewModel.cs" />
+  </ItemGroup>
+</Project>

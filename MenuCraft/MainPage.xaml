@@ -1,0 +1,51 @@
+<Page x:Class="MenuCraft.MainPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:core="using:MenuCraft.Core" xmlns:helpers="using:MenuCraft.Helpers">
+ <Page.Resources><helpers:LocalizedTextConverter x:Key="LocalizedText"/></Page.Resources>
+ <Grid x:Name="Root" Padding="28,16,28,20" RowSpacing="14">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*" MinHeight="100"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <StackPanel Spacing="4"><TextBlock x:Uid="Heading" Style="{ThemeResource TitleTextBlockStyle}"/><TextBlock x:Uid="Subtitle" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap"/></StackPanel>
+  <Grid Grid.Row="1" ColumnSpacing="12">
+   <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+   <ComboBox x:Name="MenuKind" x:Uid="MenuKind" SelectedIndex="0" SelectionChanged="FilterChanged" HorizontalAlignment="Stretch" MaxWidth="360" AutomationProperties.AutomationId="MenuKind">
+    <ComboBoxItem x:Uid="ClassicOption" Tag="Classic"/><ComboBoxItem x:Uid="HandlerOption" Tag="Handler"/><ComboBoxItem x:Uid="ModernOption" Tag="Modern"/>
+   </ComboBox>
+   <TextBlock x:Name="AccessLabel" Grid.Column="1" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+  </Grid>
+  <InfoBar x:Name="ScopeInfo" Grid.Row="2" IsOpen="True" IsClosable="False" Severity="Informational"/>
+  <StackPanel Grid.Row="3" Spacing="8">
+   <CommandBar DefaultLabelPosition="Right" HorizontalAlignment="Stretch" Background="Transparent">
+    <AppBarButton x:Uid="DesktopPreviewButton" Icon="Back" Click="DesktopPreviewClick"/>
+    <AppBarButton x:Uid="AddButton" Icon="Add" Click="AddClick" AccessKey="N" AutomationProperties.AutomationId="AddCommand"/>
+    <AppBarButton x:Name="ToggleButton" x:Uid="HideButton" Icon="HideBcc" Click="ToggleClick" IsEnabled="False" AutomationProperties.AutomationId="ToggleCommand"/>
+    <AppBarButton x:Name="EditButton" x:Uid="EditButton" Icon="Edit" Click="EditClick" IsEnabled="False" AutomationProperties.AutomationId="EditCommand"/>
+    <AppBarButton x:Uid="UndoButton" Icon="Undo" Click="UndoClick" AutomationProperties.AutomationId="UndoCommand"/>
+    <AppBarButton x:Uid="RefreshButton" Icon="Refresh" Click="RefreshClick" AccessKey="R"/>
+    <CommandBar.SecondaryCommands><AppBarButton x:Uid="BackupsButton" Click="BackupsClick"/><AppBarButton x:Uid="SettingsButton" Click="SettingsClick"/><AppBarButton x:Uid="HelpButton" Click="HelpClick"/></CommandBar.SecondaryCommands>
+   </CommandBar>
+   <Grid ColumnSpacing="12"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+    <TextBox x:Name="SearchBox" x:Uid="SearchBox" TextChanged="SearchChanged" AutomationProperties.AutomationId="Search"/>
+    <CheckBox x:Name="EditableOnly" x:Uid="EditableOnly" Grid.Column="1" Checked="FilterChanged" Unchecked="FilterChanged"/>
+   </Grid>
+  </StackPanel>
+  <Grid Grid.Row="4" Background="{ThemeResource LayerFillColorDefaultBrush}" CornerRadius="8">
+   <ListView x:Name="EntryList" ItemsSource="{x:Bind ViewModel.Entries}" SelectionChanged="SelectionChanged" SelectionMode="Single" x:Uid="EntryList" AutomationProperties.AutomationId="Entries">
+    <ListView.ItemContainerStyle><Style TargetType="ListViewItem"><Setter Property="HorizontalContentAlignment" Value="Stretch"/></Style></ListView.ItemContainerStyle>
+    <ListView.ItemTemplate><DataTemplate x:DataType="core:MenuEntry"><Grid Padding="8,10" RowSpacing="4">
+     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+     <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+     <TextBlock Grid.Column="1" Margin="16,0,0,0" Text="{x:Bind StateKey, Converter={StaticResource LocalizedText}}" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+     <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{x:Bind Summary}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12" TextTrimming="CharacterEllipsis"/>
+    </Grid></DataTemplate></ListView.ItemTemplate>
+   </ListView>
+   <TextBlock x:Name="EmptyLabel" x:Uid="EmptyLabel" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Margin="20" Visibility="Collapsed"/>
+   <ProgressRing x:Name="BusyRing" IsActive="False" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+  </Grid>
+  <StackPanel Grid.Row="5" Spacing="6">
+   <TextBlock x:Name="DetailName" x:Uid="SelectEntry" FontSize="18" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+   <TextBlock x:Name="DetailNote" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+   <TextBlock x:Name="DetailPath" FontFamily="Consolas" FontSize="12" IsTextSelectionEnabled="True" TextWrapping="Wrap" MaxHeight="48"/>
+   <TextBlock x:Name="DetailCommand" FontSize="12" IsTextSelectionEnabled="True" TextWrapping="Wrap" MaxHeight="48"/>
+  </StackPanel>
+  <InfoBar x:Name="Status" Grid.Row="6" IsOpen="True" IsClosable="False" Severity="Informational"/>
+ </Grid>
+</Page>

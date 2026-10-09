@@ -1,0 +1,46 @@
+<Page x:Class="MenuCraft.DesktopPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:core="using:MenuCraft.Core" xmlns:helpers="using:MenuCraft.Helpers">
+ <Page.Resources><helpers:MenuVisibilityConverter x:Key="MenuVisibility"/></Page.Resources>
+ <Grid x:Name="Layout" Padding="28,16,28,24" RowSpacing="16">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <StackPanel Spacing="6">
+   <TextBlock x:Uid="DesktopHeading" Style="{ThemeResource TitleTextBlockStyle}"/>
+   <TextBlock x:Uid="DesktopSubtitle" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+  </StackPanel>
+  <StackPanel Grid.Row="1" Spacing="8">
+   <CommandBar Background="Transparent" DefaultLabelPosition="Right">
+    <AppBarButton x:Uid="RefreshButton" Icon="Refresh" Click="RefreshClick"/>
+    <AppBarButton x:Uid="UndoButton" Icon="Undo" Click="UndoClick"/>
+    <AppBarButton x:Uid="AdvancedButton" Icon="Setting" Click="AdvancedClick"/>
+   </CommandBar>
+   <InfoBar x:Uid="DesktopScope" IsOpen="True" IsClosable="False" Severity="Informational"/>
+  </StackPanel>
+  <Grid x:Name="ContentGrid" Grid.Row="2" ColumnSpacing="24" RowSpacing="16">
+   <Grid.ColumnDefinitions><ColumnDefinition x:Name="PreviewColumn" Width="*"/><ColumnDefinition x:Name="DetailColumn" Width="*"/></Grid.ColumnDefinitions>
+   <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+   <Grid Background="{ThemeResource LayerFillColorDefaultBrush}" CornerRadius="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" Padding="6">
+    <ListView x:Name="MenuList" x:Uid="DesktopMenuList" ItemsSource="{x:Bind Items}" SelectionChanged="MenuSelectionChanged" AutomationProperties.AutomationId="DesktopMenu">
+     <ListView.ItemContainerStyle><Style TargetType="ListViewItem"><Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="MinHeight" Value="0"/><Setter Property="Padding" Value="4,0"/></Style></ListView.ItemContainerStyle>
+     <ListView.ItemTemplate><DataTemplate x:DataType="core:DesktopMenuItem">
+      <Grid Height="{x:Bind RowHeight}">
+       <Border Height="1" VerticalAlignment="Center" Background="{ThemeResource DividerStrokeColorDefaultBrush}" Visibility="{x:Bind IsSeparator, Converter={StaticResource MenuVisibility}}"/>
+       <TextBlock Text="{x:Bind DisplayLabel}" VerticalAlignment="Center" Margin="10,0" TextTrimming="CharacterEllipsis" Visibility="{x:Bind IsSeparator, Converter={StaticResource MenuVisibility}, ConverterParameter=Invert}"/>
+      </Grid>
+     </DataTemplate></ListView.ItemTemplate>
+    </ListView>
+    <ProgressRing x:Name="LoadingRing" IsActive="False" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+   </Grid>
+   <ScrollViewer x:Name="Details" Grid.Column="1" VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="16" Padding="0,8,0,0">
+     <TextBlock x:Name="SelectedTitle" x:Uid="DesktopSelect" FontSize="22" FontWeight="SemiBold" TextWrapping="Wrap"/>
+     <TextBlock x:Name="SelectedHelp" x:Uid="DesktopSelectHelp" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+     <Button x:Name="RemoveButton" x:Uid="RemoveDesktopButton" Style="{StaticResource AccentButtonStyle}" Click="RemoveClick" IsEnabled="False" HorizontalAlignment="Left" AutomationProperties.AutomationId="RemoveDesktopEntry"/>
+     <TextBlock x:Uid="DesktopUndoHelp" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+     <Expander x:Name="RegistrationDetails" x:Uid="RegistrationDetails" HorizontalAlignment="Stretch" Visibility="Collapsed">
+      <TextBlock x:Name="RegistrationPath" TextWrapping="Wrap" IsTextSelectionEnabled="True" FontSize="12"/>
+     </Expander>
+    </StackPanel>
+   </ScrollViewer>
+  </Grid>
+  <InfoBar x:Name="Result" Grid.Row="3" IsOpen="True" IsClosable="False" Severity="Informational"/>
+ </Grid>
+</Page>

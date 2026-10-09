@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MenuCraft (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "MenuCraft (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

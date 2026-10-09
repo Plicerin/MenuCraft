@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="DesktopMenuEmpty" xml:space="preserve"><value>Windows returned an empty desktop menu. Reopen the desktop menu and try Refresh. No menu changes were made by this scan.</value></data>
+  <data name="DesktopReaderElevated" xml:space="preserve"><value>The desktop reader must run with Explorer's normal permissions. Close MenuCraft and launch it normally, then use Restart as administrator for system commands.</value></data>
+  <data name="DesktopReaderDifferentUser" xml:space="preserve"><value>MenuCraft and Explorer are running as different Windows accounts. Restart using the desktop account to avoid editing another user's menu.</value></data>
+  <data name="DesktopReaderTimeout" xml:space="preserve"><value>Explorer's desktop reader did not respond in time. Close any open desktop menu and try Refresh.</value></data>
+  <data name="DesktopCached" xml:space="preserve"><value>Hidden successfully in a fresh Windows menu. Explorer is still caching its previous menu. Reopen the desktop menu, then Refresh here. Undo remains available.</value></data>
+  <data name="Hidden" xml:space="preserve"><value>Hidden</value></data>
+  <data name="Editable" xml:space="preserve"><value>Editable</value></data>
+  <data name="ReadOnly" xml:space="preserve"><value>Read-only</value></data>
+  <data name="Heading.Text" xml:space="preserve"><value>Your menu. Less clutter.</value></data>
+  <data name="Subtitle.Text" xml:space="preserve"><value>Find right-click commands, hide the extras, and add the tools you use.</value></data>
+  <data name="MenuKind.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Menu type</value></data>
+  <data name="ClassicOption.Content" xml:space="preserve"><value>Show more options · commands</value></data>
+  <data name="HandlerOption.Content" xml:space="preserve"><value>Show more options · extensions</value></data>
+  <data name="ModernOption.Content" xml:space="preserve"><value>Windows 11 · compact menu</value></data>
+  <data name="AddButton.Label" xml:space="preserve"><value>Add command</value></data>
+  <data name="HideButton.Label" xml:space="preserve"><value>Hide</value></data>
+  <data name="EditButton.Label" xml:space="preserve"><value>Edit command</value></data>
+  <data name="UndoButton.Label" xml:space="preserve"><value>Undo last change</value></data>
+  <data name="RefreshButton.Label" xml:space="preserve"><value>Refresh</value></data>
+  <data name="BackupsButton.Label" xml:space="preserve"><value>Open backup folder</value></data>
+  <data name="SettingsButton.Label" xml:space="preserve"><value>Installed app settings</value></data>
+  <data name="HelpButton.Label" xml:space="preserve"><value>About menu support</value></data>
+  <data name="SearchBox.PlaceholderText" xml:space="preserve"><value>Search names, locations, or commands</value></data>
+  <data name="SearchBox.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Search menu entries</value></data>
+  <data name="EditableOnly.Content" xml:space="preserve"><value>Editable only</value></data>
+  <data name="EditableOnly.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Show editable entries only</value></data>
+  <data name="EntryList.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Menu entries</value></data>
+  <data name="EmptyLabel.Text" xml:space="preserve"><value>No matching entries. Try another menu type or clear your search.</value></data>
+  <data name="SelectEntry.Text" xml:space="preserve"><value>Select an entry to see its details</value></data>
+  <data name="SelectEntryText" xml:space="preserve"><value>Select an entry to see its details</value></data>
+  <data name="UserSession" xml:space="preserve"><value>Current user</value></data>
+  <data name="AdminSession" xml:space="preserve"><value>Administrator session</value></data>
+  <data name="ClassicInfo" xml:space="preserve"><value>These commands appear under Show more options. Hide and restore supported commands, or add your own. Some entries require administrator access.</value></data>
+  <data name="HandlerInfo" xml:space="preserve"><value>Classic extensions can generate several menu items dynamically. This version lists their registrations; use the owning app to configure them.</value></data>
+  <data name="ModernInfo" xml:space="preserve"><value>Compact-menu extensions are registered by their apps. This version inventories those registrations; it cannot generically edit or reorder them. Check the owning app’s settings.</value></data>
+  <data name="Loaded" xml:space="preserve"><value>{0} entries in this view · {1} scan warnings. No changes are made until you save or confirm.</value></data>
+  <data name="ProtectedNote" xml:space="preserve"><value>Protected default or core action. This utility leaves it read-only.</value></data>
+  <data name="HandlerNote" xml:space="preserve"><value>Dynamic shell extension. Configure its menu entries in the owning application.</value></data>
+  <data name="ManagedNote" xml:space="preserve"><value>Windows or the owning app controls this command. Generic editing is unavailable.</value></data>
+  <data name="AdminNote" xml:space="preserve"><value>System-wide command. Close MenuCraft and run its executable as administrator to hide or restore this entry.</value></data>
+  <data name="HiddenNote" xml:space="preserve"><value>Hidden with LegacyDisable. Restore makes this registration eligible to appear again.</value></data>
+  <data name="EditableNote" xml:space="preserve"><value>Eligible to appear. Explorer may apply additional selection and file-type conditions.</value></data>
+  <data name="ModernNote" xml:space="preserve"><value>App-managed compact-menu registration. The ID is not always the displayed menu label. Availability depends on the app and selected files.</value></data>
+  <data name="Hide" xml:space="preserve"><value>Hide</value></data>
+  <data name="Restore" xml:space="preserve"><value>Restore</value></data>
+  <data name="ConfirmChange" xml:space="preserve"><value>{0}
+
+{1}
+
+This changes the command’s visibility. MenuCraft saves an undo record first.</value></data>
+  <data name="Saved" xml:space="preserve"><value>Saved. Reopen the right-click menu to see the change. Use Undo last change to restore the previous values.</value></data>
+  <data name="ChangeFailed" xml:space="preserve"><value>The change could not finish. If it was interrupted, use Undo last change to recover.</value></data>
+  <data name="NoUndo" xml:space="preserve"><value>There are no pending changes to undo.</value></data>
+  <data name="Undo" xml:space="preserve"><value>Undo last change</value></data>
+  <data name="UndoConfirm" xml:space="preserve"><value>Restore the values saved for “{0}” on {1:g}?
+
+Newer changes made by other apps will not be overwritten.</value></data>
+  <data name="CommandName" xml:space="preserve"><value>Menu label</value></data>
+  <data name="Executable" xml:space="preserve"><value>Application (.exe)</value></data>
+  <data name="Arguments" xml:space="preserve"><value>Arguments</value></data>
+  <data name="Location" xml:space="preserve"><value>Show when right-clicking</value></data>
+  <data name="Browse" xml:space="preserve"><value>Browse for application</value></data>
+  <data name="Scope0" xml:space="preserve"><value>Files</value></data>
+  <data name="Scope1" xml:space="preserve"><value>Files and folders</value></data>
+  <data name="Scope2" xml:space="preserve"><value>Folders</value></data>
+  <data name="Scope3" xml:space="preserve"><value>Empty space inside a folder</value></data>
+  <data name="Scope4" xml:space="preserve"><value>All shell folders</value></data>
+  <data name="Scope5" xml:space="preserve"><value>Drives</value></data>
+  <data name="Scope6" xml:space="preserve"><value>Desktop background</value></data>
+  <data name="ArgumentHelp" xml:space="preserve"><value>Use &quot;%1&quot; for the selected item or &quot;%V&quot; for a background folder. Keep paths quoted. This saves the command without running it. New commands appear in Show more options for your user account.</value></data>
+  <data name="AddTitle" xml:space="preserve"><value>Add a menu command</value></data>
+  <data name="EditTitle" xml:space="preserve"><value>Edit your command</value></data>
+  <data name="Save" xml:space="preserve"><value>Save command</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Close" xml:space="preserve"><value>Close</value></data>
+  <data name="HelpTitle" xml:space="preserve"><value>What MenuCraft can edit</value></data>
+  <data name="HelpText" xml:space="preserve"><value>Classic commands: hide or restore ordinary executable commands, and add or edit your own commands. Core actions, delegated commands, and dynamic extensions remain read-only.
+
+Compact menu: inspect installed app registrations. MenuCraft does not edit those registrations or built-in actions.
+
+Scope: common file, folder, drive, and background registrations in the 64-bit registry. File-type-specific commands, Send to, and New submenus are not included.
+
+System entries: run the executable as administrator when you want to edit supported machine-wide commands. Windows may still protect individual keys.
+
+Undo: each change is recorded before writing. Undo works newest first and preserves unrelated or newer edits. Backups are in your LocalAppData/MenuCraft/History folder. Keep this folder to retain recovery history.
+
+Visibility can vary by selection and application. App updates may recreate their own entries. Reopen the menu after a change; if Explorer caches it, sign out and back in when convenient.</value></data>
+  <data name="AddButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Add command</value></data>
+  <data name="HideButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Hide</value></data>
+  <data name="EditButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Edit command</value></data>
+  <data name="UndoButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Undo last change</value></data>
+  <data name="RefreshButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Refresh</value></data>
+  <data name="BackupsButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Open backup folder</value></data>
+  <data name="SettingsButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Installed app settings</value></data>
+  <data name="HelpButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>About menu support</value></data>
+  <data name="DesktopHeading.Text" xml:space="preserve"><value>Your desktop menu</value></data>
+  <data name="DesktopSubtitle.Text" xml:space="preserve"><value>Select an entry you don’t need, then remove it from the menu. You can undo every change.</value></data>
+  <data name="AdvancedButton.Label" xml:space="preserve"><value>Advanced entries</value></data>
+  <data name="DesktopPreviewButton.Label" xml:space="preserve"><value>Desktop preview</value></data>
+  <data name="DesktopScope.Message" xml:space="preserve"><value>Live desktop preview · Show more options. This displays Windows’ current classic menu labels and order. The compact Windows 11 menu and app-managed entries are not fully editable.</value></data>
+  <data name="DesktopMenuList.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Current desktop context menu</value></data>
+  <data name="DesktopSelect.Text" xml:space="preserve"><value>Choose an entry</value></data>
+  <data name="DesktopSelectText" xml:space="preserve"><value>Choose an entry</value></data>
+  <data name="DesktopSelectHelp.Text" xml:space="preserve"><value>Click a menu item on the left to check whether it can be removed. Clicking here will not run the command.</value></data>
+  <data name="DesktopSelectHelpText" xml:space="preserve"><value>Click a menu item on the left to check whether it can be removed. Clicking here will not run the command.</value></data>
+  <data name="RemoveDesktopButton.Content" xml:space="preserve"><value>Remove from menu</value></data>
+  <data name="RemoveDesktop" xml:space="preserve"><value>Remove from menu</value></data>
+  <data name="RemoveDesktopButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Remove from menu</value></data>
+  <data name="DesktopUndoHelp.Text" xml:space="preserve"><value>Removal hides a supported command and keeps its registration. Undo last change restores the previous values.</value></data>
+  <data name="RegistrationDetails.Header" xml:space="preserve"><value>Technical details</value></data>
+  <data name="RegistrationDetails.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Technical details</value></data>
+  <data name="DesktopLoaded" xml:space="preserve"><value>Read {0} entries from the desktop menu. Select one to review removal options.</value></data>
+  <data name="DesktopReadFailed" xml:space="preserve"><value>Could not read the desktop menu.</value></data>
+  <data name="DesktopAdminHelp" xml:space="preserve"><value>This command is registered for all users. Restart MenuCraft as administrator to remove it. You will review and confirm the removal after restarting.</value></data>
+  <data name="DesktopRemoveHelp" xml:space="preserve"><value>This menu item matches a supported command registration. Remove from menu hides it; the application stays installed. If it shares a folder-background registration, it will also disappear from those folder menus.</value></data>
+  <data name="DesktopSubmenuHelp" xml:space="preserve"><value>This is a submenu. Removing its contents is not supported in this version. The preview shows top-level menu entries only.</value></data>
+  <data name="DesktopManagedHelp" xml:space="preserve"><value>Windows or an app generates this item. MenuCraft cannot reliably map it to a removable command registration, so it leaves it unchanged. Check the owning app’s context-menu settings.</value></data>
+  <data name="RestartAdmin" xml:space="preserve"><value>Restart as administrator</value></data>
+  <data name="AdminCancelled" xml:space="preserve"><value>Administrator restart cancelled. No menu changes were made.</value></data>
+  <data name="DesktopConfirm" xml:space="preserve"><value>Remove “{0}” from the context menu?
+
+MenuCraft will hide this command and save an undo record. If it uses a shared folder-background registration, those menus are affected too. The application itself will stay installed.</value></data>
+  <data name="DesktopChanged" xml:space="preserve"><value>The desktop menu changed. Refresh it and select the item again.</value></data>
+  <data name="DesktopStillVisible" xml:space="preserve"><value>The registration was hidden, but Windows still reports this item. It may be cached or supplied by another registration. Use Undo to restore the change.</value></data>
+  <data name="DesktopRemoved" xml:space="preserve"><value>Removed from the menu. The refreshed preview no longer contains this command. Use Undo last change to bring it back.</value></data>
+  <data name="DesktopUndone" xml:space="preserve"><value>Previous values restored. The desktop preview has been refreshed.</value></data>
+  <data name="CanRemove" xml:space="preserve"><value>Removable</value></data>
+  <data name="NeedsAdmin" xml:space="preserve"><value>Administrator required</value></data>
+  <data name="AppManaged" xml:space="preserve"><value>Managed by Windows or an app</value></data>
+  <data name="AdvancedButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Advanced entries</value></data>
+  <data name="DesktopPreviewButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Desktop preview</value></data>
+</root>
