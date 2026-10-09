@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="CompactMenuButton.Label" xml:space="preserve"><value>Compact menu</value></data>
+  <data name="CompactMenuButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Manage Windows 11 compact menu integrations</value></data>
+  <data name="ModernEditableNote" xml:space="preserve"><value>Hide this app handler for your Windows account. All commands and file types sharing the handler change together, including any classic-menu entries it supplies. The app stays installed. Explorer may need a new sign-in to pick up the change.</value></data>
+  <data name="ModernHiddenNote" xml:space="preserve"><value>Hidden by MenuCraft for your Windows account. Restore removes this block. Explorer may retain its cached menu until you sign out and back in.</value></data>
+  <data name="ModernProtectedNote" xml:space="preserve"><value>This handler belongs to a Windows system package and is protected.</value></data>
+  <data name="ModernInvalidNote" xml:space="preserve"><value>The app did not declare a valid handler identifier. This integration is read-only.</value></data>
+  <data name="ModernMachineBlockedNote" xml:space="preserve"><value>This handler is blocked system-wide. MenuCraft leaves that block unchanged.</value></data>
+  <data name="ModernExternalBlockedNote" xml:space="preserve"><value>This handler was already blocked outside MenuCraft. Restore is disabled to preserve that existing setting.</value></data>
+  <data name="ModernEntryChanged" xml:space="preserve"><value>This integration or its block setting changed. Refresh the list and review it again.</value></data>
+  <data name="ConfirmModernChange" xml:space="preserve"><value>Change “{0}” for your Windows account?
+
+All commands and file types sharing this handler change together, including any classic-menu entries it supplies. The app stays installed. Windows may cache the old menu until you sign out and back in.
+
+Undo last change can restore the previous value.</value></data>
+  <data name="ModernSaved" xml:space="preserve"><value>Compact-menu setting saved. Reopen the menu to check the result. If Explorer retains its cached version, sign out and back in when convenient. Undo remains available.</value></data>
   <data name="DesktopMenuEmpty" xml:space="preserve"><value>Windows returned an empty desktop menu. Reopen the desktop menu and try Refresh. No menu changes were made by this scan.</value></data>
   <data name="DesktopReaderElevated" xml:space="preserve"><value>The desktop reader must run with Explorer's normal permissions. Close MenuCraft and launch it normally, then use Restart as administrator for system commands.</value></data>
   <data name="DesktopReaderDifferentUser" xml:space="preserve"><value>MenuCraft and Explorer are running as different Windows accounts. Restart using the desktop account to avoid editing another user's menu.</value></data>
@@ -34,7 +49,7 @@
   <data name="AdminSession" xml:space="preserve"><value>Administrator session</value></data>
   <data name="ClassicInfo" xml:space="preserve"><value>These commands appear under Show more options. Hide and restore supported commands, or add your own. Some entries require administrator access.</value></data>
   <data name="HandlerInfo" xml:space="preserve"><value>Classic extensions can generate several menu items dynamically. This version lists their registrations; use the owning app to configure them.</value></data>
-  <data name="ModernInfo" xml:space="preserve"><value>Compact-menu extensions are registered by their apps. This version inventories those registrations; it cannot generically edit or reorder them. Check the owning app’s settings.</value></data>
+  <data name="ModernInfo" xml:space="preserve"><value>Installed app handlers for the compact Windows 11 menu. Select an integration to Hide or Restore it for your account. This inventory uses app registration names; it is not an exact menu preview. Shared handlers are grouped.</value></data>
   <data name="Loaded" xml:space="preserve"><value>{0} entries in this view · {1} scan warnings. No changes are made until you save or confirm.</value></data>
   <data name="ProtectedNote" xml:space="preserve"><value>Protected default or core action. This utility leaves it read-only.</value></data>
   <data name="HandlerNote" xml:space="preserve"><value>Dynamic shell extension. Configure its menu entries in the owning application.</value></data>
@@ -42,7 +57,7 @@
   <data name="AdminNote" xml:space="preserve"><value>System-wide command. Close MenuCraft and run its executable as administrator to hide or restore this entry.</value></data>
   <data name="HiddenNote" xml:space="preserve"><value>Hidden with LegacyDisable. Restore makes this registration eligible to appear again.</value></data>
   <data name="EditableNote" xml:space="preserve"><value>Eligible to appear. Explorer may apply additional selection and file-type conditions.</value></data>
-  <data name="ModernNote" xml:space="preserve"><value>App-managed compact-menu registration. The ID is not always the displayed menu label. Availability depends on the app and selected files.</value></data>
+  <data name="ModernNote" xml:space="preserve"><value>An app-owned Windows 11 context-menu registration.</value></data>
   <data name="Hide" xml:space="preserve"><value>Hide</value></data>
   <data name="Restore" xml:space="preserve"><value>Restore</value></data>
   <data name="ConfirmChange" xml:space="preserve"><value>{0}
@@ -78,7 +93,7 @@ Newer changes made by other apps will not be overwritten.</value></data>
   <data name="HelpTitle" xml:space="preserve"><value>What MenuCraft can edit</value></data>
   <data name="HelpText" xml:space="preserve"><value>Classic commands: hide or restore ordinary executable commands, and add or edit your own commands. Core actions, delegated commands, and dynamic extensions remain read-only.
 
-Compact menu: inspect installed app registrations. MenuCraft does not edit those registrations or built-in actions.
+Compact menu: hide or restore supported app handlers for your account. Commands sharing a handler change together. Built-in Windows actions are protected. Explorer may cache changes until your next sign-in.
 
 Scope: common file, folder, drive, and background registrations in the 64-bit registry. File-type-specific commands, Send to, and New submenus are not included.
 
@@ -99,7 +114,7 @@ Visibility can vary by selection and application. App updates may recreate their
   <data name="DesktopSubtitle.Text" xml:space="preserve"><value>Select an entry you don’t need, then remove it from the menu. You can undo every change.</value></data>
   <data name="AdvancedButton.Label" xml:space="preserve"><value>Advanced entries</value></data>
   <data name="DesktopPreviewButton.Label" xml:space="preserve"><value>Desktop preview</value></data>
-  <data name="DesktopScope.Message" xml:space="preserve"><value>Live desktop preview · Show more options. This displays Windows’ current classic menu labels and order. The compact Windows 11 menu and app-managed entries are not fully editable.</value></data>
+  <data name="DesktopScope.Message" xml:space="preserve"><value>Live desktop preview · Show more options. This displays Windows’ current classic menu labels and order. Use Compact menu to manage supported Windows 11 app integrations. Built-in actions and submenu contents remain protected.</value></data>
   <data name="DesktopMenuList.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Current desktop context menu</value></data>
   <data name="DesktopSelect.Text" xml:space="preserve"><value>Choose an entry</value></data>
   <data name="DesktopSelectText" xml:space="preserve"><value>Choose an entry</value></data>

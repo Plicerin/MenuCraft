@@ -31,6 +31,19 @@ public sealed class InventoryTests
     }
 
     [TestMethod]
+    public void Scan_InstalledHandlers_GroupsRegistrationsForCompactControls()
+    {
+        var warnings = new List<string>();
+        var store = new WindowsRegistryStore();
+        var service = new ModernMenuService(new RegistryEdits(store, Path.Combine(Path.GetTempPath(), "MenuCraft-unused")), store, ModernMenuScanner.Scan);
+        var entries = service.Scan(warnings);
+        Assert.AreEqual(entries.Count, entries.Select(e => e.Command).Distinct(StringComparer.OrdinalIgnoreCase).Count());
+        Assert.IsTrue(entries.Where(e => e.CanToggle).All(e => ModernMenuService.NormalizeClsid(e.Command) is not null && e.Hive == "HKCU"));
+        Console.WriteLine($"Compact handlers: {entries.Count}; editable: {entries.Count(e => e.CanToggle)}; warnings: {warnings.Count}");
+        foreach (var entry in entries) Console.WriteLine($"{entry.Name}: {entry.StateKey}");
+    }
+
+    [TestMethod]
     public async Task Filter_QueryAndKind_ReturnsOnlyMatchingEntries()
     {
         var vm = new MenuViewModel();

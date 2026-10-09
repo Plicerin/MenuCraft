@@ -136,5 +136,6 @@ public sealed partial class DesktopPage : Page
         => await new ContentDialog { XamlRoot = XamlRoot, Title = title, Content = new TextBlock { Text = message, TextWrapping = TextWrapping.Wrap }, PrimaryButtonText = action, CloseButtonText = L("Cancel"), DefaultButton = ContentDialogButton.Close }.ShowAsync() == ContentDialogResult.Primary;
     private async void RefreshClick(object sender, RoutedEventArgs args) => await ReloadAsync();
     private void AdvancedClick(object sender, RoutedEventArgs args) { if (!_busy) Frame.Navigate(typeof(MainPage)); }
+    private void CompactMenuClick(object sender, RoutedEventArgs args) { if (!_busy) Frame.Navigate(typeof(MainPage), "Modern"); }
     private void SetStatus(string text, bool warning = false) { Result.Message = text; Result.Severity = warning ? InfoBarSeverity.Warning : InfoBarSeverity.Informational; }
 }

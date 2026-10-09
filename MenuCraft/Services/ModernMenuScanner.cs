@@ -21,7 +21,8 @@ internal static class ModernMenuScanner
                 foreach (var verb in extension.Descendants().Where(e => e.Name.LocalName == "Verb"))
                 {
                     result.Add(new MenuEntry { Name = package.DisplayName + " · " + ((string?)verb.Attribute("Id") ?? ""), Scope = (string?)verb.Parent?.Attribute("Type") ?? "*",
-                        Hive = "MSIX", Path = package.Id.FamilyName, Command = (string?)verb.Attribute("Clsid") ?? "", Kind = "Modern", Note = "ModernNote" });
+                        Hive = "MSIX", Path = package.Id.FamilyName, Command = (string?)verb.Attribute("Clsid") ?? "", Kind = "Modern",
+                        Note = package.SignatureKind == Windows.ApplicationModel.PackageSignatureKind.System ? "ModernProtectedNote" : "ModernNote" });
                 }
             }
             catch (Exception ex) when (ex is UnauthorizedAccessException or IOException or System.Xml.XmlException or System.Runtime.InteropServices.COMException)

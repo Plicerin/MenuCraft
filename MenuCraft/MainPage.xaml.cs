@@ -1,5 +1,6 @@
 using MenuCraft.Core;
 using MenuCraft.Helpers;
+using MenuCraft.Services;
 using MenuCraft.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
@@ -13,6 +14,7 @@ public sealed partial class MainPage : Page
 {
     private readonly RegistryEdits _edits = new(new WindowsRegistryStore(), System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MenuCraft", "History"));
     private readonly MenuService _service;
+    private readonly ModernMenuService _modernService;
     private bool _ready;
     private bool _busy;
     public MenuViewModel ViewModel { get; } = new();
@@ -22,6 +24,7 @@ public sealed partial class MainPage : Page
     public MainPage()
     {
         _service = new(_edits);
+        _modernService = new(_edits, new WindowsRegistryStore(), ModernMenuScanner.Scan);
         InitializeComponent();
         AccessLabel.Text = L(MenuService.IsAdministrator ? "AdminSession" : "UserSession");
         _ready = true;
@@ -40,20 +43,26 @@ public sealed partial class MainPage : Page
         BusyRing.Visibility = Visibility.Visible;
         try
         {
-            await ViewModel.LoadAsync(_service);
+            await ViewModel.LoadAsync(_service, _modernService);
             Filter();
             SetStatus(string.Format(System.Globalization.CultureInfo.CurrentCulture, L("Loaded"), ViewModel.Entries.Count, ViewModel.Warnings.Count), ViewModel.Warnings.Count > 0);
         }
         catch (Exception ex) { SetStatus(ex.Message, true); }
         finally { _busy = false; BusyRing.IsActive = false; BusyRing.Visibility = Visibility.Collapsed; }
     }
+    protected override void OnNavigatedTo(Microsoft.UI.Xaml.Navigation.NavigationEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        if (args.Parameter is "Modern") MenuKind.SelectedIndex = 2;
+    }
     private void Filter()
     {
         if (!_ready) return;
         string kind = (MenuKind.SelectedItem as ComboBoxItem)?.Tag as string ?? "Classic";
         ScopeInfo.Message = L(kind + "Info");
-        EditableOnly.IsEnabled = kind == "Classic";
-        ViewModel.Filter(kind, SearchBox.Text, kind == "Classic" && EditableOnly.IsChecked == true);
+        AddButton.Visibility = EditButton.Visibility = kind == "Classic" ? Visibility.Visible : Visibility.Collapsed;
+        EditableOnly.IsEnabled = kind is "Classic" or "Modern";
+        ViewModel.Filter(kind, SearchBox.Text, EditableOnly.IsEnabled && EditableOnly.IsChecked == true);
         EmptyLabel.Visibility = ViewModel.Entries.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         UpdateSelection();
         SetStatus(string.Format(System.Globalization.CultureInfo.CurrentCulture, L("Loaded"), ViewModel.Entries.Count, ViewModel.Warnings.Count), ViewModel.Warnings.Count > 0);
@@ -81,10 +90,11 @@ public sealed partial class MainPage : Page
         var entry = Selected;
         if (entry is null || _busy) return;
         var action = L(entry.IsHidden ? "Restore" : "Hide");
-        if (!await ConfirmAsync(action, string.Format(System.Globalization.CultureInfo.CurrentCulture, L("ConfirmChange"), entry.Name, entry.Location), action)) return;
-        await RunEditAsync(() => _service.Toggle(entry));
+        string confirmation = entry.Kind == "Modern" ? "ConfirmModernChange" : "ConfirmChange";
+        if (!await ConfirmAsync(action, string.Format(System.Globalization.CultureInfo.CurrentCulture, L(confirmation), entry.Name, entry.Location), action)) return;
+        await RunEditAsync(() => { if (entry.Kind == "Modern") _modernService.Toggle(entry); else _service.Toggle(entry); }, entry.Kind == "Modern" ? "ModernSaved" : "Saved");
     }
-    private async Task RunEditAsync(Action action)
+    private async Task RunEditAsync(Action action, string savedKey = "Saved")
     {
         if (_busy) return;
         _busy = true;
@@ -93,9 +103,9 @@ public sealed partial class MainPage : Page
             await Task.Run(action);
             _busy = false;
             await ReloadAsync();
-            SetStatus(L("Saved"));
+            SetStatus(L(savedKey));
         }
-        catch (Exception ex) { SetStatus(L("ChangeFailed") + " " + ex.Message, true); }
+        catch (Exception ex) { SetStatus(L("ChangeFailed") + " " + (ex.Message == "ModernEntryChanged" ? L("ModernEntryChanged") : ex.Message), true); }
         finally { _busy = false; }
     }
     private async void UndoClick(object sender, RoutedEventArgs args)
@@ -106,7 +116,7 @@ public sealed partial class MainPage : Page
             var record = _edits.Latest();
             if (record is null) { SetStatus(L("NoUndo")); return; }
             if (!await ConfirmAsync(L("Undo"), string.Format(System.Globalization.CultureInfo.CurrentCulture, L("UndoConfirm"), record.Description, record.Created.LocalDateTime), L("Undo"))) return;
-            await RunEditAsync(() => { _edits.Undo(record); MenuService.NotifyShell(); });
+            await RunEditAsync(() => { _edits.Undo(record); MenuService.NotifyShell(); }, record.Edits.Any(e => e.Path == ModernMenuService.BlockedPath) ? "ModernSaved" : "Saved");
         }
         catch (Exception ex) { SetStatus(ex.Message, true); }
     }

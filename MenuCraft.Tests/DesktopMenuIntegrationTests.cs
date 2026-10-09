@@ -42,14 +42,17 @@ public sealed class DesktopMenuIntegrationTests
         finally { Directory.Delete(directory, true); }
     }
 
-    [TestMethod]
-    public void Launch_DefaultDesktopScan_WindowSurvivesReaderCompletion()
+    [DataTestMethod]
+    [DataRow("")]
+    [DataRow("--compact-menu")]
+    public void Launch_MenuView_WindowSurvivesLoading(string arguments)
     {
         string executable = Executable;
         Assert.IsTrue(File.Exists(executable), "Build the app before running the startup regression test.");
         using var process = Process.Start(new ProcessStartInfo(executable)
         {
             UseShellExecute = false,
+            Arguments = arguments,
             WorkingDirectory = Path.GetDirectoryName(executable)!
         })!;
         try

@@ -156,6 +156,12 @@ public sealed class RegistryEdits(IRegistryStore store, string historyDirectory)
 
     private static void Validate(string hive, string path, string name)
     {
+        if (path.Equals(ModernMenuService.BlockedPath, StringComparison.OrdinalIgnoreCase))
+        {
+            if (hive != "HKCU" || !Guid.TryParseExact(name, "B", out var clsid) || clsid == Guid.Empty)
+                throw new InvalidDataException("Unsupported shell extension block.");
+            return;
+        }
         if (hive is not ("HKCU" or "HKLM") || !path.StartsWith(@"Software\Classes\", StringComparison.OrdinalIgnoreCase)
             || path.Contains("..", StringComparison.Ordinal) || path.Contains('\0'))
             throw new InvalidDataException("The change is outside supported menu registrations.");

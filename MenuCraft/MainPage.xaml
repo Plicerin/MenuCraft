@@ -14,7 +14,7 @@
   <StackPanel Grid.Row="3" Spacing="8">
    <CommandBar DefaultLabelPosition="Right" HorizontalAlignment="Stretch" Background="Transparent">
     <AppBarButton x:Uid="DesktopPreviewButton" Icon="Back" Click="DesktopPreviewClick"/>
-    <AppBarButton x:Uid="AddButton" Icon="Add" Click="AddClick" AccessKey="N" AutomationProperties.AutomationId="AddCommand"/>
+    <AppBarButton x:Name="AddButton" x:Uid="AddButton" Icon="Add" Click="AddClick" AccessKey="N" AutomationProperties.AutomationId="AddCommand"/>
     <AppBarButton x:Name="ToggleButton" x:Uid="HideButton" Icon="HideBcc" Click="ToggleClick" IsEnabled="False" AutomationProperties.AutomationId="ToggleCommand"/>
     <AppBarButton x:Name="EditButton" x:Uid="EditButton" Icon="Edit" Click="EditClick" IsEnabled="False" AutomationProperties.AutomationId="EditCommand"/>
     <AppBarButton x:Uid="UndoButton" Icon="Undo" Click="UndoClick" AutomationProperties.AutomationId="UndoCommand"/>

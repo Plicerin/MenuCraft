@@ -23,6 +23,7 @@ public sealed partial class MainWindow : Window
         AppWindow.Resize(new Windows.Graphics.SizeInt32(1080, 900));
 
         // Navigate the root frame to the main page on startup.
-        RootFrame.Navigate(typeof(DesktopPage));
+        if (Environment.GetCommandLineArgs().Contains("--compact-menu")) RootFrame.Navigate(typeof(MainPage), "Modern");
+        else RootFrame.Navigate(typeof(DesktopPage));
     }
 }

@@ -8,13 +8,13 @@ public sealed class MenuViewModel
     private List<MenuEntry> _all = [];
     public ObservableCollection<MenuEntry> Entries { get; } = [];
     public List<string> Warnings { get; private set; } = [];
-    public async Task LoadAsync(MenuService service)
+    public async Task LoadAsync(MenuService service, ModernMenuService? modernService = null)
     {
         var data = await Task.Run(() =>
         {
             var warnings = new List<string>();
             var entries = service.Scan(warnings);
-            try { entries.AddRange(ModernMenuScanner.Scan(warnings)); }
+            try { entries.AddRange(modernService is null ? ModernMenuScanner.Scan(warnings) : modernService.Scan(warnings)); }
             catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or UnauthorizedAccessException or InvalidOperationException)
             { warnings.Add(ex.Message); }
             return (entries, warnings);
