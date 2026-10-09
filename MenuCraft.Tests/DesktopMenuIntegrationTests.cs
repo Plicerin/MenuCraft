@@ -14,6 +14,31 @@ public sealed class DesktopMenuIntegrationTests
         ?? Path.GetFullPath("../../../../../MenuCraft-win-x64/MenuCraft.exe", AppContext.BaseDirectory);
 
     [TestMethod]
+    public void ReadForItem_MissingOrRelativePath_RejectsBeforeShellAccess()
+    {
+        Assert.AreEqual("ItemMissing", DesktopMenuReader.ReadForItem("relative.txt").ErrorCode);
+        Assert.AreEqual("ItemMissing", DesktopMenuReader.ReadForItem(Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing")).ErrorCode);
+    }
+
+    [DataTestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task SelectedItemMenu_FileOrFolder_ReturnsClassicMenuWithoutExecuting(bool folder)
+    {
+        string directory = Path.Combine(Path.GetTempPath(), "MenuCraft-item-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        string selected = folder ? Path.Combine(directory, "Sample folder") : Path.Combine(directory, "Sample.txt");
+        if (folder) Directory.CreateDirectory(selected); else File.WriteAllText(selected, "unchanged");
+        try
+        {
+            var items = await ReadMenuAsync(Executable, directory, "--read-item-menu", selected);
+            Assert.IsTrue(items.Any(i => !i.IsSeparator && i.Label.Length > 0));
+            if (folder) Assert.IsTrue(Directory.Exists(selected)); else Assert.AreEqual("unchanged", File.ReadAllText(selected));
+        }
+        finally { Directory.Delete(directory, true); }
+    }
+
+    [TestMethod]
     public void ValidateDesktopReader_EmptyMenu_ReportsFailure()
         => Assert.AreEqual("DesktopMenuEmpty", DesktopMenuReader.ValidateDesktopReader(new([], ReaderUserSid: "desktop-user"), "desktop-user"));
 
@@ -125,12 +150,13 @@ public sealed class DesktopMenuIntegrationTests
         }
     }
 
-    private static async Task<List<DesktopMenuItem>> ReadMenuAsync(string executable, string directory, string flag = "--read-desktop-menu-fresh")
+    private static async Task<List<DesktopMenuItem>> ReadMenuAsync(string executable, string directory, string flag = "--read-desktop-menu-fresh", string? itemPath = null)
     {
         string output = Path.Combine(directory, Guid.NewGuid().ToString("N") + ".json");
         var start = new ProcessStartInfo(executable) { UseShellExecute = false, CreateNoWindow = true };
         start.ArgumentList.Add(flag);
         start.ArgumentList.Add(output);
+        if (itemPath is not null) start.ArgumentList.Add(itemPath);
         using var process = Process.Start(start)!;
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(25));
         try { await process.WaitForExitAsync(timeout.Token); }

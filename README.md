@@ -6,7 +6,7 @@ A small Windows 11 utility for cleaning up right-click menus. Preview your deskt
 
 ## Getting started
 
-1. Download `MenuCraft-v0.2.0-win-x64.zip` from Releases.
+1. Download `MenuCraft-v0.3.0-win-x64.zip` from Releases.
 2. Extract the entire ZIP to a folder, then open `MenuCraft.exe` inside that folder. Keep the accompanying files together.
 3. Select a command in the desktop preview and choose **Remove from menu**.
 4. For eligible system-wide commands, choose **Restart as administrator**, accept the Windows prompt, then review and confirm removal.
@@ -16,6 +16,8 @@ A small Windows 11 utility for cleaning up right-click menus. Preview your deskt
 
 For example, Malwarebytes' packaged file and folder scan commands share a handler. When installed, search **Malwarebytes** in the file view to find that integration under its app name. Hiding it affects both file and folder commands. This controls menu visibility; it does not uninstall the app.
 
+Choose **Preview a file** to inspect Windows' classic menu for a real file, or use **Preview a folder** in the toolbar's overflow menu. The preview is read-only and never invokes a command. It queries a fresh shell reader, so Explorer's cached menu may differ. This does not preview the compact first menu or expand submenus. You can also launch `MenuCraft.exe --preview-item "C:\path\to\item"`.
+
 The release bundles .NET and the Windows App SDK runtime. No installer or separate runtime installation is needed. This release is unsigned; Windows may show a publisher warning. Supported release platform: Windows 11 x64.
 
 No menu entries change merely by opening the app. **Undo last change** restores the previous registration values.
@@ -23,6 +25,7 @@ No menu entries change merely by opening the app. **Undo last change** restores 
 ## What it can do
 
 - Preview the desktop's actual classic menu labels, separators, and order.
+- Preview the classic shell menu for a selected file or folder without opening it.
 - Hide supported static commands, including eligible Git and other application registrations.
 - Read the normal Explorer menu even when the editor runs as administrator.
 - Preserve a durable undo history and refuse to overwrite conflicting newer changes.

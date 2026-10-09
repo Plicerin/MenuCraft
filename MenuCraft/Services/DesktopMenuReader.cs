@@ -21,14 +21,18 @@ internal static class DesktopMenuReader
         // Keep shell helper startup off the XAML STA to avoid the observed native startup failure.
         => Task.Run(() => ReadWorkerAsync(fresh));
 
-    private static async Task<List<DesktopMenuItem>> ReadWorkerAsync(bool fresh)
+    internal static Task<List<DesktopMenuItem>> ReadItemAsync(string path)
+        => Task.Run(() => ReadWorkerAsync(false, path));
+
+    private static async Task<List<DesktopMenuItem>> ReadWorkerAsync(bool fresh, string? itemPath = null)
     {
         string output = Path.Combine(Path.GetTempPath(), "MenuCraft-desktop-" + Guid.NewGuid().ToString("N") + ".json");
         try
         {
             var start = new ProcessStartInfo(Environment.ProcessPath!) { UseShellExecute = false, CreateNoWindow = true };
-            start.ArgumentList.Add(fresh ? "--read-desktop-menu-fresh" : "--read-desktop-menu");
+            start.ArgumentList.Add(itemPath is not null ? "--read-item-menu" : fresh ? "--read-desktop-menu-fresh" : "--read-desktop-menu");
             start.ArgumentList.Add(output);
+            if (itemPath is not null) start.ArgumentList.Add(itemPath);
             using var process = Process.Start(start) ?? throw new IOException("Unable to start the desktop menu reader.");
             using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(20));
             try { await process.WaitForExitAsync(timeout.Token).ConfigureAwait(false); }
@@ -67,7 +71,17 @@ internal static class DesktopMenuReader
         return snapshot.Items.Any(i => !i.IsSeparator) ? null : "DesktopMenuEmpty";
     }
 
-    private static DesktopMenuSnapshot ReadThroughExplorer(bool fresh)
+    internal static DesktopMenuSnapshot ReadForItem(string path, bool requireUnelevated = false)
+    {
+        if (!Path.IsPathFullyQualified(path) || path.Contains('"') || path.Any(char.IsControl)
+            || (!File.Exists(path) && !Directory.Exists(path))) return new([], ErrorCode: "ItemMissing");
+        if (requireUnelevated && MenuService.IsAdministrator) return new([], ErrorCode: "DesktopReaderElevated");
+        if (MenuService.IsAdministrator) return ReadThroughExplorer(false, path);
+        using var identity = WindowsIdentity.GetCurrent();
+        return ReadNative(itemPath: path) with { ReaderUserSid = identity.User?.Value, ReaderIsElevated = false };
+    }
+
+    private static DesktopMenuSnapshot ReadThroughExplorer(bool fresh, string? itemPath = null)
     {
         string output = Path.Combine(Path.GetTempPath(), "MenuCraft-desktop-user-" + Guid.NewGuid().ToString("N") + ".json");
         object? shellWindows = null, desktopDispatch = null, folderView = null, application = null;
@@ -88,8 +102,11 @@ internal static class DesktopMenuReader
             application = ((dynamic)folderView).Application;
             // Ask the existing desktop Explorer to launch only our read-only helper, using its own token.
             // The output path is generated here, not supplied as an arbitrary shell command.
-            string flag = fresh ? "--read-desktop-menu-fresh-user" : "--read-desktop-menu-user";
-            ((dynamic)application).ShellExecute(Environment.ProcessPath!, flag + " \"" + output + "\"", AppContext.BaseDirectory, "open", 0);
+            string flag = itemPath is not null ? "--read-item-menu-user" : fresh ? "--read-desktop-menu-fresh-user" : "--read-desktop-menu-user";
+            string arguments = flag + " \"" + output + "\"";
+            if (itemPath is not null)
+                arguments += " \"" + itemPath + new string('\\', itemPath.Length - itemPath.TrimEnd('\\').Length) + "\"";
+            ((dynamic)application).ShellExecute(Environment.ProcessPath!, arguments, AppContext.BaseDirectory, "open", 0);
             var timer = Stopwatch.StartNew();
             while (!File.Exists(output))
             {
@@ -115,18 +132,27 @@ internal static class DesktopMenuReader
     }
 
     // Runs only in a short-lived helper process: third-party shell extensions never load into the editor.
-    internal static DesktopMenuSnapshot ReadNative(bool fresh = false)
+    internal static DesktopMenuSnapshot ReadNative(bool fresh = false, string? itemPath = null)
     {
         object? shellWindows = null;
         object? desktopDispatch = null;
         IShellBrowser? browser = null;
         IShellView? view = null;
         IShellFolder? freshDesktop = null;
+        IShellItem? shellItem = null;
         object? menuObject = null;
         IntPtr menu = IntPtr.Zero;
         try
         {
-            if (fresh)
+            if (itemPath is not null)
+            {
+                var shellItemIid = typeof(IShellItem).GUID;
+                Marshal.ThrowExceptionForHR(SHCreateItemFromParsingName(itemPath, IntPtr.Zero, ref shellItemIid, out shellItem));
+                var uiHandler = new Guid("3981E225-F559-11D3-8E3A-00C04F6837D5"); // BHID_SFUIObject
+                var contextIid = typeof(IContextMenu).GUID;
+                Marshal.ThrowExceptionForHR(shellItem.BindToHandler(IntPtr.Zero, ref uiHandler, ref contextIid, out menuObject));
+            }
+            else if (fresh)
             {
                 // A fresh view verifies registration changes, but can differ from Explorer's desktop UI.
                 Marshal.ThrowExceptionForHR(SHGetDesktopFolder(out freshDesktop));
@@ -147,13 +173,13 @@ internal static class DesktopMenuReader
                 view = browser.QueryActiveShellView();
             }
             var iid = typeof(IContextMenu).GUID;
-            menuObject = view.GetItemObject(0, ref iid);
-            var context = (IContextMenu)menuObject;
+            if (itemPath is null) menuObject = view!.GetItemObject(0, ref iid);
+            var context = (IContextMenu)menuObject!;
             menu = CreatePopupMenu();
             if (menu == IntPtr.Zero) throw new System.ComponentModel.Win32Exception();
             Marshal.ThrowExceptionForHR(context.QueryContextMenu(menu, 0, 1, 0x7FFF, 0));
             if (menuObject is IContextMenu3 extended) extended.HandleMenuMsg2(0x117, (nuint)menu, IntPtr.Zero, out _);
-            var localVerbs = ReadLocalVerbs();
+            var localVerbs = itemPath is null ? ReadLocalVerbs() : new Dictionary<string, string>();
             var items = new List<DesktopMenuItem>();
             int count = GetMenuItemCount(menu);
             if (count < 0) throw new System.ComponentModel.Win32Exception();
@@ -198,6 +224,7 @@ internal static class DesktopMenuReader
             if (desktopDispatch is not null) Marshal.ReleaseComObject(desktopDispatch);
             if (shellWindows is not null) Marshal.ReleaseComObject(shellWindows);
             if (freshDesktop is not null) Marshal.ReleaseComObject(freshDesktop);
+            if (shellItem is not null) Marshal.ReleaseComObject(shellItem);
         }
     }
 
@@ -259,6 +286,12 @@ internal static class DesktopMenuReader
         [PreserveSig] int BindToStorage(IntPtr pidl, IntPtr context, ref Guid iid, out IntPtr result);
         [PreserveSig] int CompareIDs(IntPtr param, IntPtr first, IntPtr second);
         [PreserveSig] int CreateViewObject(IntPtr hwnd, ref Guid iid, [MarshalAs(UnmanagedType.Interface)] out object result);
+    }
+
+    [ComImport, Guid("43826D1E-E718-42EE-BC55-A1E261C37BFE"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    private interface IShellItem
+    {
+        [PreserveSig] int BindToHandler(IntPtr context, ref Guid handler, ref Guid iid, [MarshalAs(UnmanagedType.Interface)] out object result);
     }
 
     [ComImport, Guid("9BA05972-F6A8-11CF-A442-00A0C90A8F39"), ClassInterface(ClassInterfaceType.None)]
@@ -325,6 +358,7 @@ internal static class DesktopMenuReader
     }
     [DllImport("user32.dll", SetLastError = true)] private static extern IntPtr CreatePopupMenu();
     [DllImport("shell32.dll")] private static extern int SHGetDesktopFolder(out IShellFolder folder);
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode)] private static extern int SHCreateItemFromParsingName(string path, IntPtr context, ref Guid iid, out IShellItem item);
     [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)] [return: MarshalAs(UnmanagedType.Bool)] private static extern bool GetMenuItemInfo(IntPtr menu, uint item, [MarshalAs(UnmanagedType.Bool)] bool byPosition, ref MenuItemInfo info);
     [DllImport("user32.dll")] [return: MarshalAs(UnmanagedType.Bool)] private static extern bool DestroyMenu(IntPtr menu);
     [DllImport("user32.dll")] private static extern int GetMenuItemCount(IntPtr menu);

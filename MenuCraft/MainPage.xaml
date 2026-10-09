@@ -19,12 +19,13 @@
   <StackPanel Grid.Row="3" Spacing="8">
    <CommandBar DefaultLabelPosition="Right" HorizontalAlignment="Stretch" Background="Transparent">
     <AppBarButton x:Uid="DesktopPreviewButton" Icon="Back" Click="DesktopPreviewClick"/>
+    <AppBarButton x:Uid="PreviewFileButton" Icon="Document" Click="PreviewFileClick"/>
     <AppBarButton x:Name="AddButton" x:Uid="AddButton" Icon="Add" Click="AddClick" AccessKey="N" AutomationProperties.AutomationId="AddCommand"/>
     <AppBarButton x:Name="ToggleButton" x:Uid="HideButton" Icon="HideBcc" Click="ToggleClick" IsEnabled="False" AutomationProperties.AutomationId="ToggleCommand"/>
     <AppBarButton x:Name="EditButton" x:Uid="EditButton" Icon="Edit" Click="EditClick" IsEnabled="False" AutomationProperties.AutomationId="EditCommand"/>
     <AppBarButton x:Uid="UndoButton" Icon="Undo" Click="UndoClick" AutomationProperties.AutomationId="UndoCommand"/>
     <AppBarButton x:Uid="RefreshButton" Icon="Refresh" Click="RefreshClick" AccessKey="R"/>
-    <CommandBar.SecondaryCommands><AppBarButton x:Uid="BackupsButton" Click="BackupsClick"/><AppBarButton x:Uid="SettingsButton" Click="SettingsClick"/><AppBarButton x:Uid="HelpButton" Click="HelpClick"/></CommandBar.SecondaryCommands>
+    <CommandBar.SecondaryCommands><AppBarButton x:Uid="PreviewFolderButton" Icon="Folder" Click="PreviewFolderClick"/><AppBarButton x:Uid="BackupsButton" Click="BackupsClick"/><AppBarButton x:Uid="SettingsButton" Click="SettingsClick"/><AppBarButton x:Uid="HelpButton" Click="HelpClick"/></CommandBar.SecondaryCommands>
    </CommandBar>
    <Grid ColumnSpacing="12"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
     <TextBox x:Name="SearchBox" x:Uid="SearchBox" TextChanged="SearchChanged" AutomationProperties.AutomationId="Search"/>
@@ -56,6 +57,16 @@
    </Expander>
   </StackPanel>
   <InfoBar x:Name="Status" Grid.Row="6" IsOpen="True" IsClosable="False" Severity="Informational"/>
+  <ContentDialog x:Name="ItemPreviewDialog" x:Uid="ItemPreviewDialog" DefaultButton="Close">
+   <ContentDialog.Resources><x:Double x:Key="ContentDialogMaxWidth">800</x:Double></ContentDialog.Resources>
+   <StackPanel Spacing="12">
+    <TextBlock x:Name="PreviewPath" TextWrapping="Wrap" IsTextSelectionEnabled="True"/>
+    <TextBlock x:Uid="ItemPreviewHelp" TextWrapping="Wrap"/>
+    <ListView x:Name="PreviewItems" x:Uid="PreviewItems" SelectionMode="None" MaxHeight="340">
+     <ListView.ItemTemplate><DataTemplate x:DataType="core:DesktopMenuItem"><TextBlock Text="{x:Bind DisplayLabel}" Height="{x:Bind RowHeight}" VerticalAlignment="Center"/></DataTemplate></ListView.ItemTemplate>
+    </ListView>
+   </StackPanel>
+  </ContentDialog>
    <ContentDialog x:Name="GuideDialog" x:Uid="GuideDialog" DefaultButton="Close"><ContentDialog.Resources><x:Double x:Key="ContentDialogMaxWidth">1000</x:Double></ContentDialog.Resources>
     <ScrollViewer MaxHeight="480">
      <StackPanel Spacing="12">

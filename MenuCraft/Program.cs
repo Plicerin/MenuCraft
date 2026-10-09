@@ -9,13 +9,15 @@ internal static class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        if (args.Length == 2 && args[0] is "--read-desktop-menu" or "--read-desktop-menu-fresh"
+        bool itemReader = args.Length == 3 && args[0] is "--read-item-menu" or "--read-item-menu-user";
+        if (itemReader || args.Length == 2 && args[0] is "--read-desktop-menu" or "--read-desktop-menu-fresh"
             or "--read-desktop-menu-user" or "--read-desktop-menu-fresh-user" or "--read-desktop-menu-via-explorer")
         {
             Marshal.ThrowExceptionForHR(OleInitialize(IntPtr.Zero));
             try
             {
-                var snapshot = DesktopMenuReader.ReadForDesktop(args[0].Contains("-fresh", StringComparison.Ordinal),
+                var snapshot = itemReader ? DesktopMenuReader.ReadForItem(args[2], args[0].EndsWith("-user", StringComparison.Ordinal))
+                    : DesktopMenuReader.ReadForDesktop(args[0].Contains("-fresh", StringComparison.Ordinal),
                     args[0].EndsWith("-user", StringComparison.Ordinal), args[0] == "--read-desktop-menu-via-explorer");
                 // Publish a complete document so the Explorer-launched reader can be polled safely.
                 string temporary = args[1] + "." + Guid.NewGuid().ToString("N") + ".tmp";

@@ -25,6 +25,7 @@ public sealed partial class MainWindow : Window
         // Navigate the root frame to the main page on startup.
         var arguments = Environment.GetCommandLineArgs();
         if (arguments.Length == 3 && arguments[1] == "--select-command") RootFrame.Navigate(typeof(MainPage), arguments[2]);
+        else if (arguments.Length == 3 && arguments[1] == "--preview-item") RootFrame.Navigate(typeof(MainPage), arguments[2]);
         else if (arguments.Contains("--commands")) RootFrame.Navigate(typeof(MainPage));
         else if (arguments.Contains("--menu-guide")) RootFrame.Navigate(typeof(MainPage), "Guide");
         else if (arguments.Contains("--files")) RootFrame.Navigate(typeof(MainPage), "Files");

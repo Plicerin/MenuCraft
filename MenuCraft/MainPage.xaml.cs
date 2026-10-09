@@ -19,6 +19,7 @@ public sealed partial class MainPage : Page
     private bool _busy;
     private string? _pendingSelection;
     private bool _showGuide;
+    private string? _previewOnLoad;
     public MenuViewModel ViewModel { get; } = new();
     private MenuEntry? Selected => EntryList.SelectedItem as MenuEntry;
     private static string L(string key) => Strings.Get(key);
@@ -33,6 +34,12 @@ public sealed partial class MainPage : Page
         {
             await ReloadAsync();
             if (_showGuide) { _showGuide = false; await ShowGuideAsync(); }
+            if (_previewOnLoad is not null)
+            {
+                var path = _previewOnLoad;
+                _previewOnLoad = null;
+                await ShowItemPreviewAsync(path);
+            }
         };
         SizeChanged += (_, args) =>
         {
@@ -69,6 +76,7 @@ public sealed partial class MainPage : Page
             _showGuide = args.Parameter is "Guide";
         }
         else if (args.Parameter is string location && location.StartsWith("HK", StringComparison.Ordinal)) _pendingSelection = location;
+        else if (args.Parameter is string path && Path.IsPathFullyQualified(path)) _previewOnLoad = path;
     }
     private void Filter()
     {
@@ -101,6 +109,50 @@ public sealed partial class MainPage : Page
         EditButton.Visibility = EditButton.IsEnabled ? Visibility.Visible : Visibility.Collapsed;
     }
     private async void RefreshClick(object sender, RoutedEventArgs args) => await ReloadAsync();
+    private async void PreviewFileClick(object sender, RoutedEventArgs args) => await PickPreviewAsync(false);
+    private async void PreviewFolderClick(object sender, RoutedEventArgs args) => await PickPreviewAsync(true);
+    private async Task PickPreviewAsync(bool folder)
+    {
+        if (_busy) return;
+        _busy = true;
+        try
+        {
+            string? path;
+            if (folder)
+            {
+                var picker = new FolderPicker();
+                picker.FileTypeFilter.Add("*");
+                WinRT.Interop.InitializeWithWindow.Initialize(picker, App.WindowHandle);
+                path = (await picker.PickSingleFolderAsync())?.Path;
+            }
+            else
+            {
+                var picker = new FileOpenPicker();
+                picker.FileTypeFilter.Add("*");
+                WinRT.Interop.InitializeWithWindow.Initialize(picker, App.WindowHandle);
+                path = (await picker.PickSingleFileAsync())?.Path;
+            }
+            if (path is null) return;
+            await ShowItemPreviewAsync(path);
+        }
+        catch (Exception ex) { SetStatus(ex is DesktopMenuReadException readError ? L(readError.ResourceKey) : ex.Message, true); }
+        finally { _busy = false; }
+    }
+    private async Task ShowItemPreviewAsync(string path)
+    {
+        _busy = true;
+        try
+        {
+            BusyRing.IsActive = true;
+            BusyRing.Visibility = Visibility.Visible;
+            PreviewItems.ItemsSource = await DesktopMenuReader.ReadItemAsync(path);
+            PreviewPath.Text = path;
+            ItemPreviewDialog.XamlRoot = XamlRoot;
+            await ItemPreviewDialog.ShowAsync();
+        }
+        catch (Exception ex) { SetStatus(ex is DesktopMenuReadException readError ? L(readError.ResourceKey) : ex.Message, true); }
+        finally { _busy = false; BusyRing.IsActive = false; BusyRing.Visibility = Visibility.Collapsed; }
+    }
     private async void ShowGuideClick(object sender, RoutedEventArgs args) => await ShowGuideAsync();
     private async Task ShowGuideAsync()
     {
