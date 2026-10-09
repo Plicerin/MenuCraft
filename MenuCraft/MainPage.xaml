@@ -1,16 +1,41 @@
 <Page x:Class="MenuCraft.MainPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:core="using:MenuCraft.Core" xmlns:helpers="using:MenuCraft.Helpers">
- <Page.Resources><helpers:LocalizedTextConverter x:Key="LocalizedText"/></Page.Resources>
+ <Page.Resources><helpers:LocalizedTextConverter x:Key="LocalizedText"/><helpers:MenuSummaryConverter x:Key="MenuSummary"/></Page.Resources>
  <Grid x:Name="Root" Padding="28,16,28,20" RowSpacing="14">
   <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*" MinHeight="100"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
   <StackPanel Spacing="4"><TextBlock x:Uid="Heading" Style="{ThemeResource TitleTextBlockStyle}"/><TextBlock x:Uid="Subtitle" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap"/></StackPanel>
   <Grid Grid.Row="1" ColumnSpacing="12">
-   <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-   <ComboBox x:Name="MenuKind" x:Uid="MenuKind" SelectedIndex="0" SelectionChanged="FilterChanged" HorizontalAlignment="Stretch" MaxWidth="360" AutomationProperties.AutomationId="MenuKind">
-    <ComboBoxItem x:Uid="ClassicOption" Tag="Classic"/><ComboBoxItem x:Uid="ModernOption" Tag="Modern"/>
+   <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+   <ComboBox x:Name="ClickLocation" x:Uid="ClickLocation" SelectedIndex="0" SelectionChanged="FilterChanged" HorizontalAlignment="Stretch" AutomationProperties.AutomationId="ClickLocation">
+    <ComboBoxItem x:Uid="LocationAllOption" Tag="All"/><ComboBoxItem x:Uid="LocationFilesOption" Tag="Files"/><ComboBoxItem x:Uid="LocationFoldersOption" Tag="Folders"/><ComboBoxItem x:Uid="LocationFolderSpaceOption" Tag="FolderSpace"/><ComboBoxItem x:Uid="LocationDesktopSpaceOption" Tag="DesktopSpace"/><ComboBoxItem x:Uid="LocationDrivesOption" Tag="Drives"/>
    </ComboBox>
-   <TextBlock x:Name="AccessLabel" Grid.Column="1" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+   <ComboBox x:Name="MenuKind" x:Uid="MenuKind" Grid.Column="1" SelectedIndex="0" SelectionChanged="FilterChanged" HorizontalAlignment="Stretch" AutomationProperties.AutomationId="MenuKind">
+    <ComboBoxItem x:Uid="AllMenusOption" Tag="All"/><ComboBoxItem x:Uid="ModernOption" Tag="Modern"/><ComboBoxItem x:Uid="ClassicOption" Tag="Classic"/>
+   </ComboBox>
   </Grid>
-  <InfoBar x:Name="ScopeInfo" Grid.Row="2" IsOpen="True" IsClosable="False" Severity="Informational"/>
+  <StackPanel Grid.Row="2" Spacing="8">
+   <InfoBar x:Name="ScopeInfo" IsOpen="True" IsClosable="False" Severity="Informational"/>
+   <Expander x:Uid="MenuGuide" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+    <ScrollViewer MaxHeight="180">
+     <StackPanel Spacing="12">
+      <TextBlock x:Uid="GuideIntro" TextWrapping="Wrap"/>
+      <Grid ColumnSpacing="24">
+       <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+       <StackPanel Spacing="8">
+        <SymbolIcon Symbol="Document" HorizontalAlignment="Left"/>
+        <TextBlock x:Uid="GuideFirstTitle" FontWeight="SemiBold" TextWrapping="Wrap"/>
+        <TextBlock x:Uid="GuideFirstBody" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+       </StackPanel>
+       <StackPanel Grid.Column="1" Spacing="8">
+        <SymbolIcon Symbol="More" HorizontalAlignment="Left"/>
+        <TextBlock x:Uid="GuideMoreTitle" FontWeight="SemiBold" TextWrapping="Wrap"/>
+        <TextBlock x:Uid="GuideMoreBody" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+       </StackPanel>
+      </Grid>
+      <Button x:Uid="GuideFileButton" Click="BrowseFilesClick" HorizontalAlignment="Left"/>
+     </StackPanel>
+    </ScrollViewer>
+   </Expander>
+  </StackPanel>
   <StackPanel Grid.Row="3" Spacing="8">
    <CommandBar DefaultLabelPosition="Right" HorizontalAlignment="Stretch" Background="Transparent">
     <AppBarButton x:Uid="DesktopPreviewButton" Icon="Back" Click="DesktopPreviewClick"/>
@@ -32,9 +57,9 @@
     <ListView.ItemTemplate><DataTemplate x:DataType="core:MenuEntry"><Grid Padding="8,10" RowSpacing="4">
      <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-     <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+     <TextBlock Text="{x:Bind DisplayName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
      <TextBlock Grid.Column="1" Margin="16,0,0,0" Text="{x:Bind StateKey, Converter={StaticResource LocalizedText}}" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-     <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{x:Bind Summary}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12" TextTrimming="CharacterEllipsis"/>
+     <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Converter={StaticResource MenuSummary}}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12" TextTrimming="CharacterEllipsis"/>
     </Grid></DataTemplate></ListView.ItemTemplate>
    </ListView>
    <TextBlock x:Name="EmptyLabel" x:Uid="EmptyLabel" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Margin="20" Visibility="Collapsed"/>
@@ -43,8 +68,12 @@
   <StackPanel Grid.Row="5" Spacing="6">
    <TextBlock x:Name="DetailName" x:Uid="SelectEntry" FontSize="18" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
    <TextBlock x:Name="DetailNote" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-   <TextBlock x:Name="DetailPath" FontFamily="Consolas" FontSize="12" IsTextSelectionEnabled="True" TextWrapping="Wrap" MaxHeight="48"/>
-   <TextBlock x:Name="DetailCommand" FontSize="12" IsTextSelectionEnabled="True" TextWrapping="Wrap" MaxHeight="48"/>
+   <Expander x:Name="TechnicalDetails" x:Uid="RegistrationDetails" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+    <ScrollViewer MaxHeight="110"><StackPanel Spacing="6">
+     <TextBlock x:Name="DetailPath" FontFamily="Consolas" FontSize="12" IsTextSelectionEnabled="True" TextWrapping="Wrap"/>
+     <TextBlock x:Name="DetailCommand" FontSize="12" IsTextSelectionEnabled="True" TextWrapping="Wrap"/>
+    </StackPanel></ScrollViewer>
+   </Expander>
   </StackPanel>
   <InfoBar x:Name="Status" Grid.Row="6" IsOpen="True" IsClosable="False" Severity="Informational"/>
  </Grid>

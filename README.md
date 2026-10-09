@@ -1,6 +1,6 @@
 # MenuCraft
 
-A small Windows 11 utility for cleaning up right-click menus. Preview your desktop's **Show more options** menu, or open **Compact menu** to hide supported app integrations. Changes have an undo record.
+A small Windows 11 utility for cleaning up right-click menus. Preview your desktop's **Show more options** menu, or browse file and folder entries across both Windows menu types. Changes have an undo record.
 
 [Download the latest Windows x64 release](https://github.com/Plicerin/MenuCraft/releases/latest) · [Report an issue](https://github.com/Plicerin/MenuCraft/issues)
 
@@ -10,7 +10,11 @@ A small Windows 11 utility for cleaning up right-click menus. Preview your deskt
 2. Extract the entire ZIP to a folder, then open `MenuCraft.exe` inside that folder. Keep the accompanying files together.
 3. Select a command in the desktop preview and choose **Remove from menu**.
 4. For eligible system-wide commands, choose **Restart as administrator**, accept the Windows prompt, then review and confirm removal.
-5. To clean up app entries in the first Windows 11 menu, choose **Compact menu**, select an app handler, and choose **Hide**. Choose **Restore** to bring it back. These changes apply to the current user without administrator access.
+5. For an entry seen when right-clicking a file, choose **File & folder menus**, keep **A file** and **Both menus** selected, and search the app name. Select its row and choose **Hide** or **Restore**. The row shows which menu and locations it belongs to.
+
+**Where do you right-click?** separates files, folders, empty folder space, desktop space, and drives. **Which menu opens?** separates the first Windows 11 menu from **Show more options**. Keep **Both menus** selected if unsure. Open **Where is my menu entry? · Visual guide** for an illustrated explanation. App registration names can differ from their displayed menu labels.
+
+For example, Malwarebytes' packaged file and folder scan commands share a handler. When installed, search **Malwarebytes** in the file view to find that integration under its app name. Hiding it affects both file and folder commands. This controls menu visibility; it does not uninstall the app.
 
 The release bundles .NET and the Windows App SDK runtime. No installer or separate runtime installation is needed. This release is unsigned; Windows may show a publisher warning. Supported release platform: Windows 11 x64.
 
@@ -22,7 +26,7 @@ No menu entries change merely by opening the app. **Undo last change** restores 
 - Hide supported static commands, including eligible Git and other application registrations.
 - Read the normal Explorer menu even when the editor runs as administrator.
 - Preserve a durable undo history and refuse to overwrite conflicting newer changes.
-- Inspect common file, folder, background, and drive registrations in **Advanced entries**.
+- Browse common file, folder, background, and drive registrations in **All menu entries**, with readable locations and registration details available on demand.
 - Start with commands that can be hidden or restored, including an administrator restart action for supported system-wide commands. Unsupported commands are excluded by default.
 - Add and edit custom commands owned by MenuCraft for the current user.
 - Hide and restore supported compact-menu app handlers, grouping commands that share a handler.

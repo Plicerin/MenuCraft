@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="ClickLocation.Header" xml:space="preserve"><value>Where do you right-click?</value></data>
+  <data name="ClickLocation.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Where do you right-click?</value></data>
+  <data name="MenuKind.Header" xml:space="preserve"><value>Which menu opens?</value></data>
+  <data name="AllMenusOption.Content" xml:space="preserve"><value>Both menus · find an entry</value></data>
+  <data name="LocationAllOption.Content" xml:space="preserve"><value>All locations</value></data>
+  <data name="LocationFilesOption.Content" xml:space="preserve"><value>A file</value></data>
+  <data name="LocationFoldersOption.Content" xml:space="preserve"><value>A folder</value></data>
+  <data name="LocationFolderSpaceOption.Content" xml:space="preserve"><value>Empty space inside a folder</value></data>
+  <data name="LocationDesktopSpaceOption.Content" xml:space="preserve"><value>Empty space on the desktop</value></data>
+  <data name="LocationDrivesOption.Content" xml:space="preserve"><value>A drive</value></data>
+  <data name="LocationFiles" xml:space="preserve"><value>Files</value></data>
+  <data name="LocationFolders" xml:space="preserve"><value>Folders</value></data>
+  <data name="LocationFolderSpace" xml:space="preserve"><value>Empty folder space</value></data>
+  <data name="LocationDesktopSpace" xml:space="preserve"><value>Desktop background</value></data>
+  <data name="LocationDrives" xml:space="preserve"><value>Drives</value></data>
+  <data name="LocationFileTypes" xml:space="preserve"><value>Some file types</value></data>
+  <data name="LocationOtherLocation" xml:space="preserve"><value>Other app locations</value></data>
+  <data name="FirstMenu" xml:space="preserve"><value>First menu</value></data>
+  <data name="MoreOptionsMenu" xml:space="preserve"><value>Show more options</value></data>
+  <data name="AllInfo" xml:space="preserve"><value>Find an app across both menu types, then select it to Hide or Restore. Each row shows where it is registered. These are registrations, not an exact preview; some depend on the selected file. Folder-background entries can also affect the desktop.</value></data>
+  <data name="MenuGuide.Header" xml:space="preserve"><value>Where is my menu entry? · Visual guide</value></data>
+  <data name="MenuGuide.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Visual guide to Windows right-click menus</value></data>
+  <data name="GuideIntro.Text" xml:space="preserve"><value>Illustration: right-click a file in File Explorer. Windows offers two menu levels.</value></data>
+  <data name="GuideFirstTitle.Text" xml:space="preserve"><value>1  Right-click → First menu</value></data>
+  <data name="GuideFirstBody.Text" xml:space="preserve"><value>The short Windows 11 menu appears first. Apps can add entries here, such as Scan with Malwarebytes. Choose A file and search the app name.</value></data>
+  <data name="GuideMoreTitle.Text" xml:space="preserve"><value>2  Show more options → Classic menu</value></data>
+  <data name="GuideMoreBody.Text" xml:space="preserve"><value>Click Show more options at the bottom to open the older menu. Keep Both menus selected if you do not know which one contains your entry.</value></data>
+  <data name="GuideFileButton.Content" xml:space="preserve"><value>Browse entries for files</value></data>
+  <data name="GuideFileButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Browse entries for files in both menus</value></data>
+  <data name="FileMenusButton.Label" xml:space="preserve"><value>File &amp; folder menus</value></data>
+  <data name="FileMenusButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Browse file and folder right-click entries</value></data>
   <data name="CompactMenuButton.Label" xml:space="preserve"><value>Compact menu</value></data>
   <data name="CompactMenuButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Manage Windows 11 compact menu integrations</value></data>
   <data name="ModernEditableNote" xml:space="preserve"><value>Hide this app handler for your Windows account. All commands and file types sharing the handler change together, including any classic-menu entries it supplies. The app stays installed. Explorer may need a new sign-in to pick up the change.</value></data>
@@ -26,8 +57,8 @@ Undo last change can restore the previous value.</value></data>
   <data name="Heading.Text" xml:space="preserve"><value>Your menu. Less clutter.</value></data>
   <data name="Subtitle.Text" xml:space="preserve"><value>Find right-click commands, hide the extras, and add the tools you use.</value></data>
   <data name="MenuKind.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Menu type</value></data>
-  <data name="ClassicOption.Content" xml:space="preserve"><value>Show more options · commands</value></data>
-  <data name="ModernOption.Content" xml:space="preserve"><value>Windows 11 · compact menu</value></data>
+  <data name="ClassicOption.Content" xml:space="preserve"><value>Show more options · classic menu</value></data>
+  <data name="ModernOption.Content" xml:space="preserve"><value>First menu · Windows 11</value></data>
   <data name="AddButton.Label" xml:space="preserve"><value>Add command</value></data>
   <data name="HideButton.Label" xml:space="preserve"><value>Hide</value></data>
   <data name="EditButton.Label" xml:space="preserve"><value>Edit my command</value></data>
@@ -110,9 +141,9 @@ Visibility can vary by selection and application. App updates may recreate their
   <data name="HelpButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>About menu support</value></data>
   <data name="DesktopHeading.Text" xml:space="preserve"><value>Your desktop menu</value></data>
   <data name="DesktopSubtitle.Text" xml:space="preserve"><value>Select an entry you don’t need, then remove it from the menu. You can undo every change.</value></data>
-  <data name="AdvancedButton.Label" xml:space="preserve"><value>Advanced entries</value></data>
+  <data name="AdvancedButton.Label" xml:space="preserve"><value>All menu entries</value></data>
   <data name="DesktopPreviewButton.Label" xml:space="preserve"><value>Desktop preview</value></data>
-  <data name="DesktopScope.Message" xml:space="preserve"><value>Live desktop preview · Show more options. This displays Windows’ current classic menu labels and order. Use Compact menu to manage supported Windows 11 app integrations. Built-in actions and submenu contents remain protected.</value></data>
+  <data name="DesktopScope.Message" xml:space="preserve"><value>This previews Show more options when you right-click empty desktop space. Looking for Scan with Malwarebytes or another file action? Open File &amp; folder menus. Built-in actions and submenu contents remain protected.</value></data>
   <data name="DesktopMenuList.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Current desktop context menu</value></data>
   <data name="DesktopSelect.Text" xml:space="preserve"><value>Choose an entry</value></data>
   <data name="DesktopSelectText" xml:space="preserve"><value>Choose an entry</value></data>
@@ -142,6 +173,6 @@ MenuCraft will hide this command and save an undo record. If it uses a shared fo
   <data name="CanRemove" xml:space="preserve"><value>Removable</value></data>
   <data name="NeedsAdmin" xml:space="preserve"><value>Administrator required</value></data>
   <data name="AppManaged" xml:space="preserve"><value>Managed by Windows or an app</value></data>
-  <data name="AdvancedButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Advanced entries</value></data>
+  <data name="AdvancedButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Browse entries across all right-click locations</value></data>
   <data name="DesktopPreviewButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Desktop preview</value></data>
 </root>

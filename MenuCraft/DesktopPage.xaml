@@ -10,7 +10,7 @@
    <CommandBar Background="Transparent" DefaultLabelPosition="Right">
     <AppBarButton x:Uid="RefreshButton" Icon="Refresh" Click="RefreshClick"/>
     <AppBarButton x:Uid="UndoButton" Icon="Undo" Click="UndoClick"/>
-    <AppBarButton x:Uid="CompactMenuButton" Icon="AllApps" Click="CompactMenuClick"/>
+    <AppBarButton x:Uid="FileMenusButton" Icon="Document" Click="FileMenusClick"/>
     <AppBarButton x:Uid="AdvancedButton" Icon="Setting" Click="AdvancedClick"/>
    </CommandBar>
    <InfoBar x:Uid="DesktopScope" IsOpen="True" IsClosable="False" Severity="Informational"/>

@@ -3,6 +3,8 @@ namespace MenuCraft.Core;
 public sealed record MenuEntry
 {
     public string Name { get; set; } = "";
+    public string Title { get; set; } = "";
+    public string DisplayName => Title.Length == 0 ? Name : Title;
     public string Scope { get; set; } = "";
     public string Hive { get; set; } = "HKCU";
     public string Path { get; set; } = "";

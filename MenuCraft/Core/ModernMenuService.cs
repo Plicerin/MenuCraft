@@ -22,6 +22,7 @@ public sealed class ModernMenuService(RegistryEdits edits, IRegistryStore store,
             result.Add(new MenuEntry
             {
                 Name = string.Join(", ", group.Select(e => e.Name).Distinct().Order(StringComparer.CurrentCultureIgnoreCase)),
+                Title = string.Join(", ", group.Select(e => e.DisplayName).Distinct().Order(StringComparer.CurrentCultureIgnoreCase)),
                 Scope = string.Join(", ", group.Select(e => e.Scope).Distinct().Order(StringComparer.OrdinalIgnoreCase)),
                 SourceIdentity = string.Join(";", group.Select(e => e.Path).Distinct().Order(StringComparer.Ordinal)),
                 Hive = "HKCU", Path = BlockedPath, Command = clsid ?? group.First().Command, Kind = "Modern", Note = note,

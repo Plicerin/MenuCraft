@@ -27,13 +27,11 @@ public sealed partial class MainPage : Page
         _service = new(_edits);
         _modernService = new(_edits, new WindowsRegistryStore(), ModernMenuScanner.Scan);
         InitializeComponent();
-        AccessLabel.Text = L(MenuService.IsAdministrator ? "AdminSession" : "UserSession");
         _ready = true;
         Loaded += async (_, _) => await ReloadAsync();
         SizeChanged += (_, args) =>
         {
             Root.Padding = new Thickness(args.NewSize.Width < 700 ? 12 : 28, 16, args.NewSize.Width < 700 ? 12 : 28, 20);
-            AccessLabel.Visibility = args.NewSize.Width < 700 ? Visibility.Collapsed : Visibility.Visible;
         };
     }
     private async Task ReloadAsync()
@@ -60,16 +58,17 @@ public sealed partial class MainPage : Page
     {
         base.OnNavigatedTo(args);
         if (args.Parameter is "Modern") MenuKind.SelectedIndex = 1;
+        else if (args.Parameter is "Files") ClickLocation.SelectedIndex = 1;
         else if (args.Parameter is string location && location.StartsWith("HK", StringComparison.Ordinal)) _pendingSelection = location;
     }
     private void Filter()
     {
         if (!_ready) return;
-        string kind = (MenuKind.SelectedItem as ComboBoxItem)?.Tag as string ?? "Classic";
+        string kind = (MenuKind.SelectedItem as ComboBoxItem)?.Tag as string ?? "All";
         ScopeInfo.Message = L(kind + "Info");
-        AddButton.Visibility = kind == "Classic" ? Visibility.Visible : Visibility.Collapsed;
-        EditableOnly.IsEnabled = kind is "Classic" or "Modern";
-        ViewModel.Filter(kind, SearchBox.Text, EditableOnly.IsEnabled && EditableOnly.IsChecked == true);
+        AddButton.Visibility = kind is "Classic" or "All" ? Visibility.Visible : Visibility.Collapsed;
+        string location = (ClickLocation.SelectedItem as ComboBoxItem)?.Tag as string ?? "All";
+        ViewModel.Filter(kind, SearchBox.Text, EditableOnly.IsChecked == true, location);
         EmptyLabel.Visibility = ViewModel.Entries.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         UpdateSelection();
         SetStatus(string.Format(System.Globalization.CultureInfo.CurrentCulture, L("Loaded"), ViewModel.Entries.Count, ViewModel.Warnings.Count), ViewModel.Warnings.Count > 0);
@@ -81,10 +80,11 @@ public sealed partial class MainPage : Page
     {
         if (!_ready) return;
         var entry = Selected;
-        DetailName.Text = entry?.Name ?? L("SelectEntryText");
+        DetailName.Text = entry?.DisplayName ?? L("SelectEntryText");
         DetailNote.Text = entry is null ? "" : L(entry.Note);
         DetailPath.Text = entry?.Location ?? "";
-        DetailCommand.Text = entry?.Command ?? "";
+        DetailCommand.Text = entry is null ? "" : entry.Name + "\n" + entry.Scope + "\n" + entry.Command;
+        TechnicalDetails.Visibility = entry is null ? Visibility.Collapsed : Visibility.Visible;
         ToggleButton.IsEnabled = entry?.CanRequestToggle == true;
         ToggleButton.Label = L(entry?.NeedsAdministrator == true ? "RestartAdmin" : entry?.IsHidden == true ? "Restore" : "Hide");
         AutomationProperties.SetName(ToggleButton, ToggleButton.Label);
@@ -92,6 +92,13 @@ public sealed partial class MainPage : Page
         EditButton.Visibility = EditButton.IsEnabled ? Visibility.Visible : Visibility.Collapsed;
     }
     private async void RefreshClick(object sender, RoutedEventArgs args) => await ReloadAsync();
+    private void BrowseFilesClick(object sender, RoutedEventArgs args)
+    {
+        SearchBox.Text = "";
+        MenuKind.SelectedIndex = 0;
+        ClickLocation.SelectedIndex = 1;
+        Filter();
+    }
     private void DesktopPreviewClick(object sender, RoutedEventArgs args) { if (!_busy) Frame.Navigate(typeof(DesktopPage)); }
     private async void ToggleClick(object sender, RoutedEventArgs args)
     {
@@ -117,7 +124,7 @@ public sealed partial class MainPage : Page
         if (!entry.CanToggle) return;
         var action = L(entry.IsHidden ? "Restore" : "Hide");
         string confirmation = entry.Kind == "Modern" ? "ConfirmModernChange" : "ConfirmChange";
-        if (!await ConfirmAsync(action, string.Format(System.Globalization.CultureInfo.CurrentCulture, L(confirmation), entry.Name, entry.Location), action)) return;
+        if (!await ConfirmAsync(action, string.Format(System.Globalization.CultureInfo.CurrentCulture, L(confirmation), entry.DisplayName, entry.Location), action)) return;
         await RunEditAsync(() => { if (entry.Kind == "Modern") _modernService.Toggle(entry); else _service.Toggle(entry); }, entry.Kind == "Modern" ? "ModernSaved" : "Saved");
     }
     private async Task RunEditAsync(Action action, string savedKey = "Saved")

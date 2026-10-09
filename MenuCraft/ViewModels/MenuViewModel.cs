@@ -22,10 +22,11 @@ public sealed class MenuViewModel
         _all = data.entries;
         Warnings = data.warnings;
     }
-    public void Filter(string kind, string query, bool editableOnly)
+    public void Filter(string kind, string query, bool editableOnly, string location = "All")
     {
         Entries.Clear();
-        foreach (var entry in _all.Where(e => e.Kind == kind && (!editableOnly || e.CanRequestToggle)
+        foreach (var entry in _all.Where(e => (e.Kind == kind || kind == "All" && e.Kind is "Classic" or "Modern") && (!editableOnly || e.CanRequestToggle)
+            && MenuScopes.Matches(e.Scope, location)
             && (e.Name + " " + e.Scope + " " + e.Command).Contains(query, StringComparison.CurrentCultureIgnoreCase)))
             Entries.Add(entry);
     }
