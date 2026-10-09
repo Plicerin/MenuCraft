@@ -18,6 +18,7 @@ public sealed partial class MainPage : Page
     private bool _ready;
     private bool _busy;
     private string? _pendingSelection;
+    private bool _showGuide;
     public MenuViewModel ViewModel { get; } = new();
     private MenuEntry? Selected => EntryList.SelectedItem as MenuEntry;
     private static string L(string key) => Strings.Get(key);
@@ -28,7 +29,11 @@ public sealed partial class MainPage : Page
         _modernService = new(_edits, new WindowsRegistryStore(), ModernMenuScanner.Scan);
         InitializeComponent();
         _ready = true;
-        Loaded += async (_, _) => await ReloadAsync();
+        Loaded += async (_, _) =>
+        {
+            await ReloadAsync();
+            if (_showGuide) { _showGuide = false; await ShowGuideAsync(); }
+        };
         SizeChanged += (_, args) =>
         {
             Root.Padding = new Thickness(args.NewSize.Width < 700 ? 12 : 28, 16, args.NewSize.Width < 700 ? 12 : 28, 20);
@@ -58,7 +63,11 @@ public sealed partial class MainPage : Page
     {
         base.OnNavigatedTo(args);
         if (args.Parameter is "Modern") MenuKind.SelectedIndex = 1;
-        else if (args.Parameter is "Files") ClickLocation.SelectedIndex = 1;
+        else if (args.Parameter is "Files" or "Guide")
+        {
+            ClickLocation.SelectedIndex = 1;
+            _showGuide = args.Parameter is "Guide";
+        }
         else if (args.Parameter is string location && location.StartsWith("HK", StringComparison.Ordinal)) _pendingSelection = location;
     }
     private void Filter()
@@ -92,8 +101,15 @@ public sealed partial class MainPage : Page
         EditButton.Visibility = EditButton.IsEnabled ? Visibility.Visible : Visibility.Collapsed;
     }
     private async void RefreshClick(object sender, RoutedEventArgs args) => await ReloadAsync();
+    private async void ShowGuideClick(object sender, RoutedEventArgs args) => await ShowGuideAsync();
+    private async Task ShowGuideAsync()
+    {
+        GuideDialog.XamlRoot = XamlRoot;
+        await GuideDialog.ShowAsync();
+    }
     private void BrowseFilesClick(object sender, RoutedEventArgs args)
     {
+        GuideDialog.Hide();
         SearchBox.Text = "";
         MenuKind.SelectedIndex = 0;
         ClickLocation.SelectedIndex = 1;

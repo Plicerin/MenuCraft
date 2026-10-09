@@ -21,8 +21,22 @@
   <data name="MoreOptionsMenu" xml:space="preserve"><value>Show more options</value></data>
   <data name="AllInfo" xml:space="preserve"><value>Find an app across both menu types, then select it to Hide or Restore. Each row shows where it is registered. These are registrations, not an exact preview; some depend on the selected file. Folder-background entries can also affect the desktop.</value></data>
   <data name="MenuGuide.Header" xml:space="preserve"><value>Where is my menu entry? · Visual guide</value></data>
+  <data name="MenuGuideButton.Content" xml:space="preserve"><value>Where is my menu entry? · Open visual guide</value></data>
+  <data name="MenuGuideButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Open the illustrated right-click menu guide</value></data>
+  <data name="GuideDialog.Title" xml:space="preserve"><value>How the two right-click menus connect</value></data>
+  <data name="GuideDialog.CloseButtonText" xml:space="preserve"><value>Back to MenuCraft</value></data>
   <data name="MenuGuide.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Visual guide to Windows right-click menus</value></data>
-  <data name="GuideIntro.Text" xml:space="preserve"><value>Illustration: right-click a file in File Explorer. Windows offers two menu levels.</value></data>
+  <data name="GuideIntro.Text" xml:space="preserve"><value>Example diagram, not a live menu: right-click a file, then choose Show more options to open the classic menu.</value></data>
+  <data name="GuideFileLabel.Text" xml:space="preserve"><value>Example.txt</value></data>
+  <data name="GuideRightClick.Text" xml:space="preserve"><value>Right-click</value></data>
+  <data name="GuideFirstMenuLabel.Text" xml:space="preserve"><value>1  First Windows 11 menu</value></data>
+  <data name="GuideClassicMenuLabel.Text" xml:space="preserve"><value>2  Classic menu</value></data>
+  <data name="GuideOpen.Text" xml:space="preserve"><value>Open</value></data>
+  <data name="GuideMalwarebytes.Text" xml:space="preserve"><value>Scan with Malwarebytes</value></data>
+  <data name="GuideMoreOptions.Text" xml:space="preserve"><value>Show more options →</value></data>
+  <data name="GuideClassicOpen.Text" xml:space="preserve"><value>Open</value></data>
+  <data name="GuideCopy.Text" xml:space="preserve"><value>Copy</value></data>
+  <data name="GuideProperties.Text" xml:space="preserve"><value>Properties</value></data>
   <data name="GuideFirstTitle.Text" xml:space="preserve"><value>1  Right-click → First menu</value></data>
   <data name="GuideFirstBody.Text" xml:space="preserve"><value>The short Windows 11 menu appears first. Apps can add entries here, such as Scan with Malwarebytes. Choose A file and search the app name.</value></data>
   <data name="GuideMoreTitle.Text" xml:space="preserve"><value>2  Show more options → Classic menu</value></data>

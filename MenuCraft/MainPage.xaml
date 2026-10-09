@@ -14,27 +14,7 @@
   </Grid>
   <StackPanel Grid.Row="2" Spacing="8">
    <InfoBar x:Name="ScopeInfo" IsOpen="True" IsClosable="False" Severity="Informational"/>
-   <Expander x:Uid="MenuGuide" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-    <ScrollViewer MaxHeight="180">
-     <StackPanel Spacing="12">
-      <TextBlock x:Uid="GuideIntro" TextWrapping="Wrap"/>
-      <Grid ColumnSpacing="24">
-       <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-       <StackPanel Spacing="8">
-        <SymbolIcon Symbol="Document" HorizontalAlignment="Left"/>
-        <TextBlock x:Uid="GuideFirstTitle" FontWeight="SemiBold" TextWrapping="Wrap"/>
-        <TextBlock x:Uid="GuideFirstBody" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-       </StackPanel>
-       <StackPanel Grid.Column="1" Spacing="8">
-        <SymbolIcon Symbol="More" HorizontalAlignment="Left"/>
-        <TextBlock x:Uid="GuideMoreTitle" FontWeight="SemiBold" TextWrapping="Wrap"/>
-        <TextBlock x:Uid="GuideMoreBody" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-       </StackPanel>
-      </Grid>
-      <Button x:Uid="GuideFileButton" Click="BrowseFilesClick" HorizontalAlignment="Left"/>
-     </StackPanel>
-    </ScrollViewer>
-   </Expander>
+   <Button x:Uid="MenuGuideButton" Click="ShowGuideClick" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
   </StackPanel>
   <StackPanel Grid.Row="3" Spacing="8">
    <CommandBar DefaultLabelPosition="Right" HorizontalAlignment="Stretch" Background="Transparent">
@@ -76,5 +56,48 @@
    </Expander>
   </StackPanel>
   <InfoBar x:Name="Status" Grid.Row="6" IsOpen="True" IsClosable="False" Severity="Informational"/>
+   <ContentDialog x:Name="GuideDialog" x:Uid="GuideDialog" DefaultButton="Close"><ContentDialog.Resources><x:Double x:Key="ContentDialogMaxWidth">1000</x:Double></ContentDialog.Resources>
+    <ScrollViewer MaxHeight="480">
+     <StackPanel Spacing="12">
+      <TextBlock x:Uid="GuideIntro" TextWrapping="Wrap"/>
+      <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" MaxHeight="190">
+       <Grid Width="880" Height="184" ColumnSpacing="12" AutomationProperties.AutomationId="MenuFlowIllustration">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="140"/><ColumnDefinition Width="36"/><ColumnDefinition Width="290"/><ColumnDefinition Width="36"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+        <StackPanel VerticalAlignment="Center" Spacing="12">
+         <Border Width="64" Height="76" CornerRadius="6" BorderThickness="2" BorderBrush="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center">
+          <StackPanel Spacing="8" VerticalAlignment="Center" Margin="12"><Border Height="2" Background="{ThemeResource TextFillColorSecondaryBrush}"/><Border Height="2" Background="{ThemeResource TextFillColorSecondaryBrush}"/><Border Height="2" Width="22" HorizontalAlignment="Left" Background="{ThemeResource TextFillColorSecondaryBrush}"/></StackPanel>
+         </Border>
+         <TextBlock x:Uid="GuideFileLabel" HorizontalAlignment="Center"/>
+         <TextBlock x:Uid="GuideRightClick" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+        </StackPanel>
+        <TextBlock Grid.Column="1" Text="→" FontSize="32" VerticalAlignment="Center" AutomationProperties.AccessibilityView="Raw"/>
+        <StackPanel Grid.Column="2" Spacing="8">
+         <TextBlock x:Uid="GuideFirstMenuLabel" FontWeight="SemiBold"/>
+         <Border Background="{ThemeResource LayerFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Padding="8">
+          <StackPanel Spacing="3">
+           <TextBlock x:Uid="GuideOpen" Margin="8,5"/>
+           <TextBlock x:Uid="GuideMalwarebytes" Margin="8,5" FontWeight="SemiBold"/>
+           <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" Margin="0,4"/>
+           <Border Background="{ThemeResource AccentFillColorDefaultBrush}" CornerRadius="4" Padding="8,7"><TextBlock x:Uid="GuideMoreOptions" Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/></Border>
+          </StackPanel>
+         </Border>
+        </StackPanel>
+        <TextBlock Grid.Column="3" Text="→" FontSize="32" VerticalAlignment="Center" AutomationProperties.AccessibilityView="Raw"/>
+        <StackPanel Grid.Column="4" Spacing="8">
+         <TextBlock x:Uid="GuideClassicMenuLabel" FontWeight="SemiBold"/>
+         <Border Background="{ThemeResource LayerFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Padding="8">
+          <StackPanel Spacing="3">
+           <TextBlock x:Uid="GuideClassicOpen" Margin="8,5"/>
+           <TextBlock x:Uid="GuideCopy" Margin="8,5"/>
+           <TextBlock x:Uid="GuideProperties" Margin="8,5"/>
+          </StackPanel>
+         </Border>
+        </StackPanel>
+       </Grid>
+      </Viewbox>
+      <Button x:Uid="GuideFileButton" Click="BrowseFilesClick" HorizontalAlignment="Left"/>
+     </StackPanel>
+    </ScrollViewer>
+   </ContentDialog>
  </Grid>
 </Page>

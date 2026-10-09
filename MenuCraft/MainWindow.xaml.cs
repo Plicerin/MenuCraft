@@ -26,6 +26,7 @@ public sealed partial class MainWindow : Window
         var arguments = Environment.GetCommandLineArgs();
         if (arguments.Length == 3 && arguments[1] == "--select-command") RootFrame.Navigate(typeof(MainPage), arguments[2]);
         else if (arguments.Contains("--commands")) RootFrame.Navigate(typeof(MainPage));
+        else if (arguments.Contains("--menu-guide")) RootFrame.Navigate(typeof(MainPage), "Guide");
         else if (arguments.Contains("--files")) RootFrame.Navigate(typeof(MainPage), "Files");
         else if (arguments.Contains("--compact-menu")) RootFrame.Navigate(typeof(MainPage), "Modern");
         else RootFrame.Navigate(typeof(DesktopPage));
