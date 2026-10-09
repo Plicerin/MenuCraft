@@ -23,7 +23,10 @@ public sealed partial class MainWindow : Window
         AppWindow.Resize(new Windows.Graphics.SizeInt32(1080, 900));
 
         // Navigate the root frame to the main page on startup.
-        if (Environment.GetCommandLineArgs().Contains("--compact-menu")) RootFrame.Navigate(typeof(MainPage), "Modern");
+        var arguments = Environment.GetCommandLineArgs();
+        if (arguments.Length == 3 && arguments[1] == "--select-command") RootFrame.Navigate(typeof(MainPage), arguments[2]);
+        else if (arguments.Contains("--commands")) RootFrame.Navigate(typeof(MainPage));
+        else if (arguments.Contains("--compact-menu")) RootFrame.Navigate(typeof(MainPage), "Modern");
         else RootFrame.Navigate(typeof(DesktopPage));
     }
 }

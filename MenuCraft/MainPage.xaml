@@ -6,7 +6,7 @@
   <Grid Grid.Row="1" ColumnSpacing="12">
    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
    <ComboBox x:Name="MenuKind" x:Uid="MenuKind" SelectedIndex="0" SelectionChanged="FilterChanged" HorizontalAlignment="Stretch" MaxWidth="360" AutomationProperties.AutomationId="MenuKind">
-    <ComboBoxItem x:Uid="ClassicOption" Tag="Classic"/><ComboBoxItem x:Uid="HandlerOption" Tag="Handler"/><ComboBoxItem x:Uid="ModernOption" Tag="Modern"/>
+    <ComboBoxItem x:Uid="ClassicOption" Tag="Classic"/><ComboBoxItem x:Uid="ModernOption" Tag="Modern"/>
    </ComboBox>
    <TextBlock x:Name="AccessLabel" Grid.Column="1" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
   </Grid>
@@ -23,7 +23,7 @@
    </CommandBar>
    <Grid ColumnSpacing="12"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
     <TextBox x:Name="SearchBox" x:Uid="SearchBox" TextChanged="SearchChanged" AutomationProperties.AutomationId="Search"/>
-    <CheckBox x:Name="EditableOnly" x:Uid="EditableOnly" Grid.Column="1" Checked="FilterChanged" Unchecked="FilterChanged"/>
+    <CheckBox x:Name="EditableOnly" x:Uid="EditableOnly" IsChecked="True" Grid.Column="1" Checked="FilterChanged" Unchecked="FilterChanged"/>
    </Grid>
   </StackPanel>
   <Grid Grid.Row="4" Background="{ThemeResource LayerFillColorDefaultBrush}" CornerRadius="8">

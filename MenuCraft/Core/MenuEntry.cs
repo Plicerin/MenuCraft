@@ -13,7 +13,9 @@ public sealed record MenuEntry
     public bool IsHidden { get; set; }
     public bool CanToggle { get; set; }
     public bool IsOwned { get; set; }
-    public string StateKey => IsHidden ? "Hidden" : CanToggle ? "Editable" : "ReadOnly";
+    public bool NeedsAdministrator => Kind == "Classic" && Note == "AdminNote";
+    public bool CanRequestToggle => CanToggle || NeedsAdministrator;
+    public string StateKey => NeedsAdministrator ? "NeedsAdmin" : IsHidden ? "Hidden" : CanToggle ? "Editable" : "ReadOnly";
     public string Location => $"{Hive}\\{Path}";
     public string Summary => $"{Scope} · {Hive} · {Kind}";
 }

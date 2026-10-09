@@ -45,6 +45,7 @@ public sealed class DesktopMenuIntegrationTests
     [DataTestMethod]
     [DataRow("")]
     [DataRow("--compact-menu")]
+    [DataRow("--commands")]
     public void Launch_MenuView_WindowSurvivesLoading(string arguments)
     {
         string executable = Executable;

@@ -17,6 +17,7 @@ public sealed partial class MainPage : Page
     private readonly ModernMenuService _modernService;
     private bool _ready;
     private bool _busy;
+    private string? _pendingSelection;
     public MenuViewModel ViewModel { get; } = new();
     private MenuEntry? Selected => EntryList.SelectedItem as MenuEntry;
     private static string L(string key) => Strings.Get(key);
@@ -45,6 +46,11 @@ public sealed partial class MainPage : Page
         {
             await ViewModel.LoadAsync(_service, _modernService);
             Filter();
+            if (_pendingSelection is not null)
+            {
+                EntryList.SelectedItem = ViewModel.Entries.FirstOrDefault(e => e.Location == _pendingSelection);
+                _pendingSelection = null;
+            }
             SetStatus(string.Format(System.Globalization.CultureInfo.CurrentCulture, L("Loaded"), ViewModel.Entries.Count, ViewModel.Warnings.Count), ViewModel.Warnings.Count > 0);
         }
         catch (Exception ex) { SetStatus(ex.Message, true); }
@@ -53,14 +59,15 @@ public sealed partial class MainPage : Page
     protected override void OnNavigatedTo(Microsoft.UI.Xaml.Navigation.NavigationEventArgs args)
     {
         base.OnNavigatedTo(args);
-        if (args.Parameter is "Modern") MenuKind.SelectedIndex = 2;
+        if (args.Parameter is "Modern") MenuKind.SelectedIndex = 1;
+        else if (args.Parameter is string location && location.StartsWith("HK", StringComparison.Ordinal)) _pendingSelection = location;
     }
     private void Filter()
     {
         if (!_ready) return;
         string kind = (MenuKind.SelectedItem as ComboBoxItem)?.Tag as string ?? "Classic";
         ScopeInfo.Message = L(kind + "Info");
-        AddButton.Visibility = EditButton.Visibility = kind == "Classic" ? Visibility.Visible : Visibility.Collapsed;
+        AddButton.Visibility = kind == "Classic" ? Visibility.Visible : Visibility.Collapsed;
         EditableOnly.IsEnabled = kind is "Classic" or "Modern";
         ViewModel.Filter(kind, SearchBox.Text, EditableOnly.IsEnabled && EditableOnly.IsChecked == true);
         EmptyLabel.Visibility = ViewModel.Entries.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
@@ -78,10 +85,11 @@ public sealed partial class MainPage : Page
         DetailNote.Text = entry is null ? "" : L(entry.Note);
         DetailPath.Text = entry?.Location ?? "";
         DetailCommand.Text = entry?.Command ?? "";
-        ToggleButton.IsEnabled = entry?.CanToggle == true;
-        ToggleButton.Label = L(entry?.IsHidden == true ? "Restore" : "Hide");
+        ToggleButton.IsEnabled = entry?.CanRequestToggle == true;
+        ToggleButton.Label = L(entry?.NeedsAdministrator == true ? "RestartAdmin" : entry?.IsHidden == true ? "Restore" : "Hide");
         AutomationProperties.SetName(ToggleButton, ToggleButton.Label);
         EditButton.IsEnabled = entry?.IsOwned == true && entry.Hive == "HKCU";
+        EditButton.Visibility = EditButton.IsEnabled ? Visibility.Visible : Visibility.Collapsed;
     }
     private async void RefreshClick(object sender, RoutedEventArgs args) => await ReloadAsync();
     private void DesktopPreviewClick(object sender, RoutedEventArgs args) { if (!_busy) Frame.Navigate(typeof(DesktopPage)); }
@@ -89,6 +97,24 @@ public sealed partial class MainPage : Page
     {
         var entry = Selected;
         if (entry is null || _busy) return;
+        if (entry.NeedsAdministrator)
+        {
+            try
+            {
+                var start = new ProcessStartInfo(Environment.ProcessPath!)
+                {
+                    UseShellExecute = true, Verb = "runas",
+                    WorkingDirectory = Path.GetDirectoryName(Environment.ProcessPath!)!
+                };
+                start.ArgumentList.Add("--select-command");
+                start.ArgumentList.Add(entry.Location);
+                using var process = Process.Start(start);
+                if (process is not null) Application.Current.Exit();
+            }
+            catch (System.ComponentModel.Win32Exception ex) { SetStatus(ex.NativeErrorCode == 1223 ? L("AdminCancelled") : ex.Message, true); }
+            return;
+        }
+        if (!entry.CanToggle) return;
         var action = L(entry.IsHidden ? "Restore" : "Hide");
         string confirmation = entry.Kind == "Modern" ? "ConfirmModernChange" : "ConfirmChange";
         if (!await ConfirmAsync(action, string.Format(System.Globalization.CultureInfo.CurrentCulture, L(confirmation), entry.Name, entry.Location), action)) return;

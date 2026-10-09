@@ -23,15 +23,16 @@ No menu entries change merely by opening the app. **Undo last change** restores 
 - Read the normal Explorer menu even when the editor runs as administrator.
 - Preserve a durable undo history and refuse to overwrite conflicting newer changes.
 - Inspect common file, folder, background, and drive registrations in **Advanced entries**.
+- Start with commands that can be hidden or restored, including an administrator restart action for supported system-wide commands. Unsupported commands are excluded by default.
 - Add and edit custom commands owned by MenuCraft for the current user.
 - Hide and restore supported compact-menu app handlers, grouping commands that share a handler.
-- Inspect dynamic classic shell handlers.
 
 ## Current limits
 
 - The desktop preview shows **Show more options**. The compact view lists installed package registrations; it is not an exact preview of the menu for the current desktop or selected file.
 - Compact changes block an entire handler for the current user, across all its commands and file types. A shared handler may also affect classic menu entries or more than one app version.
 - Core Windows actions, system-package handlers, ambiguous classic matches, and dynamic classic handlers remain protected. Existing blocks created by other tools or an administrator are read-only.
+- Dynamic classic extensions have no editable category. **Edit my command** appears only for your own MenuCraft commands; third-party commands offer Hide or Restore where supported.
 - Desktop preview shows top-level entries; it does not expand or edit submenus such as **New**.
 - Commands registered for folder backgrounds can affect both folder and desktop menus.
 - Explorer can cache a removed entry. Reopen its menu and refresh the preview; signing out and back in may be necessary. Application updates can recreate registrations.

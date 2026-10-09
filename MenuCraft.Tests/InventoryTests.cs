@@ -9,6 +9,22 @@ namespace MenuCraft.Tests;
 public sealed class InventoryTests
 {
     [TestMethod]
+    public void Entry_AdministratorRequired_OffersRestartWithoutGrantingWriteAccess()
+    {
+        var entry = new MenuEntry { Kind = "Classic", Note = "AdminNote" };
+        Assert.IsTrue(entry.CanRequestToggle);
+        Assert.IsFalse(entry.CanToggle);
+        Assert.AreEqual("NeedsAdmin", entry.StateKey);
+        entry.IsHidden = true;
+        Assert.AreEqual("NeedsAdmin", entry.StateKey);
+        entry.Note = "ManagedNote";
+        Assert.IsFalse(entry.CanRequestToggle);
+        entry.Kind = "Handler";
+        entry.Note = "AdminNote";
+        Assert.IsFalse(entry.CanRequestToggle);
+    }
+
+    [TestMethod]
     public void Scan_RealRegistry_ReadsCommonRegistrationsWithoutWriting()
     {
         var service = new MenuService(new RegistryEdits(new WindowsRegistryStore(), Path.Combine(Path.GetTempPath(), "MenuCraft-unused")));
@@ -54,7 +70,11 @@ public sealed class InventoryTests
         vm.Filter("Classic", name, false);
         Assert.IsTrue(vm.Entries.All(e => e.Kind == "Classic" && (e.Name + " " + e.Scope + " " + e.Command).Contains(name, StringComparison.CurrentCultureIgnoreCase)));
         vm.Filter("Classic", "", true);
-        Assert.IsTrue(vm.Entries.All(e => e.CanToggle));
+        Assert.IsTrue(vm.Entries.All(e => e.CanRequestToggle));
+        var expected = new MenuService(new RegistryEdits(new WindowsRegistryStore(), Path.Combine(Path.GetTempPath(), "MenuCraft-unused")))
+            .Scan([]).Where(e => e.Kind == "Classic" && (e.CanToggle || e.Note == "AdminNote")).Select(e => e.Location).ToArray();
+        CollectionAssert.AreEquivalent(expected, vm.Entries.Select(e => e.Location).ToArray());
+        Console.WriteLine($"Actionable classic commands: {vm.Entries.Count}; administrator required: {vm.Entries.Count(e => e.NeedsAdministrator)}");
         vm.Filter("Classic", Guid.NewGuid().ToString(), false);
         Assert.AreEqual(0, vm.Entries.Count);
     }

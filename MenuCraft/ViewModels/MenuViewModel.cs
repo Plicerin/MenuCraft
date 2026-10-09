@@ -25,7 +25,7 @@ public sealed class MenuViewModel
     public void Filter(string kind, string query, bool editableOnly)
     {
         Entries.Clear();
-        foreach (var entry in _all.Where(e => e.Kind == kind && (!editableOnly || e.CanToggle)
+        foreach (var entry in _all.Where(e => e.Kind == kind && (!editableOnly || e.CanRequestToggle)
             && (e.Name + " " + e.Scope + " " + e.Command).Contains(query, StringComparison.CurrentCultureIgnoreCase)))
             Entries.Add(entry);
     }
